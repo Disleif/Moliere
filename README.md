@@ -1,2 +1,2 @@
 # Moliere
-Langage de programmation Moliere
+Langage de programmation Moliere.
