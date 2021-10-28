@@ -1,0 +1,11 @@
+/!\ main
+Programme :
+
+/!\ création vars
+Création de x qui vaut y(, a qui vaut b, ...).
+
+/!\ Condition
+Si x vaut Vrai :
+Si x est supérieur ou égal à y :
+
+/!\ boucle for
