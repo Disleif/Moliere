@@ -1,11 +1,67 @@
+//!\\ possibilité d'écrire "et" au lieu de "," pour dernière opération 
+//!\\ ne pas autoriser les initialisations : var = 1, : obliger chiffre
+//!\\ répétion 
+Répéter x fois : 
+    ...
+//!\\ Retour à la ligne dans chaîne de caractères
+    "\n" / Retour à la ligne <---- comme variable
+
 /!\ main
 Programme :
 
+/!\ commentaires
+(...)
+
+/!\ types de vars
+short : petit entier
+int : entier
+long : grand entier
+long long : très grand entier
+float : réel
+char : caractère
+string : chaîne de caractères
+unsigned [type] : [type] positif
+
 /!\ création vars
-Création de x qui vaut y(, a qui vaut b, ...).
+Nouveau/Nouvel/Nouvelle nombre/ [type] x valant y(, a valant b, ...).
+//!\\ Nouveau/Nouvel/Nouvelle exigés au pluriel si multiples assignations
+
+/!\ affectation var
+Affecter y à x.
 
 /!\ Condition
-Si x vaut Vrai :
+Si x est égale à Vrai :
+    ...
 Si x est supérieur ou égal à y :
+    ...
 
 /!\ boucle for
+Pour ... tant que (CONDITION), en répétant (ACTION) :
+      |
+      V
+Pour x, ...
+Pour un nouvel ... i valant ..., ...
+Pour une nouvelle ... j valant ..., ...
+Pour des nouvelles ... k valant ..., ...
+Pour des nouveaux ... l valant ..., ...
+    ...
+
+/!\ boucle while
+Tant que x est supérieur à y :
+    ...
+
+/!\ boucle do while
+Effectuer puis répéter tant que (CONDITION) :
+    ...
+
+/!\ cout // print
+Ecrire myString + "blabla".
+
+/!\ cin // scanf
+Demander myVar.
+
+/!\ return
+Retourner myVar.
+
+/!\
+
