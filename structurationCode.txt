@@ -27,7 +27,7 @@ Nouveau/Nouvel/Nouvelle nombre/ [type] x valant y(, a valant b, ...).
 //!\\ Nouveau/Nouvel/Nouvelle exigés au pluriel si multiples assignations
 
 /!\ affectation var
-Affecter y à x.
+Assigner y à x.
 
 /!\ Condition
 Si x est égale à Vrai :
