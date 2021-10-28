@@ -8,6 +8,8 @@ Programme :
   Ecrire "Ajout de 1 à var1 ( 9 + 1 )".
   Assigner 1 + var1 à var1.
 
+  Ecrire "Affichage valeur de var1 : " + var1 + Retour à la ligne.
+
   Si var1 vaut Vrai :
 
     Appel de texteComptage avec var1.
