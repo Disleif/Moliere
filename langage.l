@@ -7,44 +7,39 @@
 %}
 
 %%
+"Ecrire"  { return PRINT; }
+"vaut"    { return ASSIGN; }
+"Si"      { return IF; }
+"Sinon"   { return ELSE; }
+"Fin"     { return END; }
+"Aller à" { return GOTO; }
 
-    /* Nombres */
-[0-9]+(\.[0-9]*)?([Ee][+-]?[0-9]+)? {
-    yylval.valeur = atof(yytext);
-    return NUM;
-}
+[0-9]+(\,[0-9]*)?([Ee][+-]?[0-9]+)? { yylval.valeur = atof(yytext); return NUM; }
+[A-Za-z_][A-Za-z_0-9]*              { strcpy( yylval.nom, yytext); return VAR; }
 
-\n {  return '\n'; }
-\r { }
-\t { }
-" " { }
+"+" { return ADD; }
+"-" { return SUB; }
+"*" { return MUL; }
+"/" { return DIV; }
 
-    /* Mots réservés */
-"écrire" { return PRINT; }
-"vaut" { return VAUT; }
-
-    /* Nom de variable */
-[A-Za-z_][A-Za-z_0-9]* {
-    strcpy( yylval.nom, yytext); 
-    return VAR;
-}
-
-    /* Opérateurs */
-"+" { return '+'; }
-"-" { return '-'; }
-"*" { return '*'; }
-"/" { return '/'; }
 "(" { return '('; }
 ")" { return ')'; }
+":" { return ':'; }
 
-    /* Fin du programme */
-<<EOF>> {
-    printf("\nLe programme est correct!\n\n");
-    return 0;
-}
-. {
-    printf ("Erreur lexicale : %s\n\n", yytext);
-    return 0;
-}
+"supérieur à"            { return SUP; }
+"inférieur à"            { return INF; }
+"supérieur ou égal à"    { return SUPEQ; }
+"inférieur ou égal à"    { return INFEQ; }
+"équivalent à"           { return EQ; }
+"n'est pas équivalent à" { return INEQ; }
+
+"(".*")" { }
+\n       { return '\n'; }
+\r       { }
+\t       { }
+" "      { }
+
+<<EOF>> { printf("Le programme est correct!\n\n"); return 0; }
+.       { printf("Erreur lexicale : %s\n\n", yytext); return 0; }
 
 %%

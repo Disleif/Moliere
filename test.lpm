@@ -1,18 +1,20 @@
-Programme :
+(Assignation de variables)
+a vaut 5
+b vaut 3
 
-  Ecrire "Creation variable var1 valant 9" + Retour à la ligne.
-  Nouvel entier var1 valant 9.
-  
-  Ecrire "Affichage valeur de var1 : " + var1 + Retour à la ligne.
+(Ecriture et opération)
+Ecrire a - b
 
-  Ecrire "Ajout de 1 à var1 ( 9 + 1 )".
-  Assigner 1 + var1 à var1.
+(Condition : > )
+Si 2 supérieur à 1,5 :
+    Ecrire 1
+Sinon :
+    Ecrire 0
+Fin
 
-  Si var1 vaut Vrai :
-
-    Appel de texteComptage avec var1.
-
-    Pour un nouvel entier i valant 0, tant que i < var1, en répétant i++ :
-      Ecrire i.
-
-
+(Condition : !=)
+Si 3 * a n'est pas équivalent à 5 * b :
+    Ecrire 1
+Sinon :
+    Ecrire 0
+Fin

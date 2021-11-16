@@ -1,6 +1,6 @@
 //!\\ possibilité d'écrire "et" au lieu de "," pour dernière opération 
 //!\\ ne pas autoriser les initialisations : var = 1, : obliger chiffre
-//!\\ répétion 
+//!\\ répétition 
 Répéter x fois : 
     ...
 //!\\ Retour à la ligne dans chaîne de caractères
@@ -34,6 +34,9 @@ Si x est égale à Vrai :
     ...
 Si x est supérieur ou égal à y :
     ...
+Sinon :
+    ...
+Fin
 
 /!\ boucle for
 Pour ... tant que (CONDITION), en répétant (ACTION) :

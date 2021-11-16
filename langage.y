@@ -1,69 +1,293 @@
 %{
-    #include <iostream>
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <cmath>   
-    #include <map>
-    #include <string>
+  #include <iostream>
+  #include <map>
+  #include <vector>
+  #include <string>
+  #include <stack>
 
-    using namespace std;
+  using namespace std;
 
-    extern int yylex ();
-    extern char* yytext;
-    extern FILE* yyin;
-    int yyerror(char *s);
+  extern int yylex ();
+  extern char* yytext;
+  extern FILE* yyin;
 
-    // Map associant chaque variable à sa valeur
-    map<string,double> variables ;
+  int yyerror(char *s);
+
+  class instruction {
+  public:
+    instruction (const int &c, const double &v=0, const string &n="") : code(c), value(v), name(n) {};  
+    int code;         // Code de l'instruction (ADD, VAR, ...)
+    double value;     // Une valeur si besoin (VAR 5, VAR 2, ...)
+    string name;      // Une référence pour la table des données (Nom de variable)
+  };
+
+  // Map associant chaque variable à sa valeur
+  map<string, double> variables;
+
+  // Map associant chaque label à sa ligne
+  map<string,int> adresses;
+
+  // Structure pour accueillir le code généré
+  vector<instruction> code_genere;    
+  int ic = 0;
+
+  // Permet d'ajouter une instruction à "code_genere"
+  int add_instruction(const int &c, const double &v=0, const string &n="") {
+    code_genere.push_back(instruction(c,v,n)); 
+    ic++;
+    return 0; 
+  }; 
 %}
 
-%union {
-    double valeur;
-    char nom[50];
+%code requires {
+  typedef struct adr {
+    int jmp; // Adresse du jmp
+    int jc;  // Adresse du jc
+  } type_adresse;
 }
+
+%union {
+  double valeur;
+  char nom[50];
+  type_adresse adresse;
+}
+
+%type <valeur> expr
 
 %token <valeur> NUM
 %token <nom> VAR
-%type <valeur> expr
-%token PRINT
-%token VAUT
 
-%left '+' '-'
-%right '*' '/'
+%token <adresse> IF
+%token ELSE
+
+%token END
+
+%token <nom> LABEL
+%token GOTO
+
+%token ASSIGN
+
+%token PRINT
+
+%token JMP JMPCOND
+
+%token SUP INF SUPEQ INFEQ EQ INEQ
+
+%left ADD SUB
+%right MUL DIV
 
 %%
 bloc :
 /* Epsilon */
-| bloc instruction '\n'   
+| bloc label instruction '\n'  
+
+label :
+/* Epsilon */
+| LABEL ':' { adresses[$1] = ic; }
 
 instruction :
 /* Epsilon */
-| expr { printf("Résultat : %g", $1); }
-| VAR VAUT expr {
-    variables[$1] = $3;
-}
-| PRINT expr { cout << $2; }
+| expr                  { }
+| VAR ASSIGN expr       { add_instruction(ASSIGN, 0, $1); }
+| PRINT expr            { add_instruction(PRINT); }
+| GOTO LABEL            { add_instruction(JMP, -999, $2); }
+| IF condition ':' '\n' { $1.jc = ic; add_instruction(JMPCOND); }
+bloc                    { $1.jmp = ic; add_instruction(JMP); code_genere[$1.jc].value = ic; }
+ELSE  ':' '\n' bloc     { }
+END                   { code_genere[$1.jmp].value = ic; }
 
 expr :
-NUM { $$ = $1; }
-| VAR { 
-    try {
-        $$ = variables.at($1);
-    }
-    catch(...) {
-        printf("La variable %s est utilisée mais jamais initialisée", $1);
-        variables[$1] = 0;
-    }
- }
-| '(' expr ')' { $$ = $2; }
-| expr '+' expr { $$ = $1 + $3; }
-| expr '-' expr { $$ = $1 - $3; }   		
-| expr '*' expr { $$ = $1 * $3; }		
-| expr '/' expr { $$ = $1 / $3; }    
+NUM             { add_instruction(NUM, $1); }
+| VAR           { add_instruction(VAR, 0, $1); }
+| '(' expr ')'  { }
+| expr ADD expr { add_instruction(ADD); }
+| expr SUB expr { add_instruction(SUB); }
+| expr MUL expr { add_instruction(MUL); }
+| expr DIV expr { add_instruction(DIV); }
+
+condition :
+expr               { }
+|  expr SUP expr   { add_instruction(SUP); }
+|  expr INF expr   { add_instruction(INF); }
+|  expr SUPEQ expr { add_instruction(SUPEQ); }
+|  expr INFEQ expr { add_instruction(INFEQ); }
+|  expr EQ expr    { add_instruction(EQ); }
+|  expr INEQ expr  { add_instruction(INEQ); }
 %%
 
 int yyerror(char *s) {					
-    printf("%s : %s\n", s, yytext);
+  printf("%s : %s\n", s, yytext);
+}
+
+// Fonction pour mieux voir le code généré 
+// (au lieu des nombres associés au tokens)
+string print_code(int ins) {
+  switch (ins) {
+    case ADD      : return "ADD";
+    case SUB      : return "SUB";
+    case MUL      : return "MUL";
+    case DIV      : return "DIV";
+    case SUP      : return "SUP";
+    case INF      : return "INF";
+    case SUPEQ    : return "SUPEQ";
+    case INFEQ    : return "INFEQ";
+    case EQ       : return "EQ";
+    case INEQ     : return "INEQ";
+    case NUM      : return "NUM";
+    case VAR      : return "VAR";
+    case PRINT    : return "OUT";
+    case ASSIGN   : return "MOV";
+    case JMP      : return "JMP";
+    case JMPCOND  : return "JC ";
+    default : return "";
+  }
+}
+
+// Fonction qui exécute le code générées
+void execution (const vector <instruction> &code_genere, map<string,double> &variables) {
+  cout << endl << "--- Exécution du programme ---" << endl;
+
+  stack<int> pile; // Pile
+  int ic = 0;      // Compteur instruction
+  double r1, r2;   // Registres
+
+  // On exécute chaque instruction
+  while (ic < code_genere.size()) {
+    instruction ins = code_genere[ic]; // Instruction actuelle
+    switch (ins.code) {
+      case ADD:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 + r2);
+        ic++;
+        break;
+
+      case SUB:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 - r2);
+        ic++;
+        break;
+
+      case MUL:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 * r2);
+        ic++;
+        break;
+
+      case DIV:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 / r2);
+        ic++;
+        break;
+
+      case SUP:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 > r2);
+        ic++;
+        break;
+
+      case INF:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 < r2);
+        ic++;
+        break;
+
+      case SUPEQ:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 >= r2);
+        ic++;
+        break;
+
+      case INFEQ:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 <= r2);
+        ic++;
+        break;
+
+      case EQ:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 == r2);
+        ic++;
+        break;
+
+      case INEQ:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 != r2);
+        ic++;
+        break;
+
+      case ASSIGN:
+        r1 = pile.top();
+        pile.pop();
+        variables[ins.name] = r1;
+        ic++;
+        break;
+
+      case PRINT:
+        r1 = pile.top();
+        pile.pop();
+        cout << "> " << r1 << endl;
+        ic++;
+        break;
+
+      case NUM:
+        pile.push(ins.value);
+        ic++;
+        break;
+
+      case JMP:
+        // Soit on récupère l'adresse à partir de la table, soit on va directement à une instruction donnée
+        ic = (ins.value == -999 ? adresses[ins.name] : ins.value);
+        break;
+
+      case JMPCOND:
+        r1 = pile.top();
+        pile.pop();
+        // Soit on skip le jump, soit on va à l'instruction donnée
+        ic = (r1 ? ic + 1 : (int)ins.value);
+        break;
+
+      case VAR:
+        try {
+          pile.push(variables.at(ins.name));
+          ic++;
+        }
+        catch(...) {
+          cout << "Variable non initialisée : \"" << ins.name << "\"" << endl;
+          return;
+        }
+        break;
+    }
+  }
 }
 
 int main(int argc, char **argv) {
@@ -72,12 +296,27 @@ int main(int argc, char **argv) {
   printf("------------------------------------\n\n");
 
   // Code pour traiter un fichier au lieu de l'entrée clavier
-  if ( argc > 1 )
-    yyin = fopen( argv[1], "r" );
-  else
-    yyin = stdin;
+  if ( argc > 1 ) yyin = fopen( argv[1], "r" );
+  else yyin = stdin;
 
-  yyparse();						
+  yyparse();
+
+  // Affichage de la liste des instructions générées
+  cout << "--- Liste des instructions ---" << endl;
+  for (int i = 0; i < code_genere.size(); i++){
+    auto instruction = code_genere [i];
+    cout << i
+         << '\t'
+         << print_code(instruction.code) 
+         << '\t'
+         << instruction.value 
+         << '\t' 
+         << instruction.name 
+         << endl;
+  }
+
+  // Maintenant que nos instructions sont corretement générées, on peut exécuter
+  execution(code_genere, variables);
 
   return 0;
 }
