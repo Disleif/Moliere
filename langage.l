@@ -1,4 +1,3 @@
-
 %option noyywrap
 
 %{
@@ -9,34 +8,43 @@
 
 %%
 
-[0-9]+(\.[0-9]*)?([Ee][+-]?[0-9]+)? {  yylval.valeur = atof(yytext); return NUM; }
-\n     {  return '\n'; }
-\r     { }
-" "    { }
-\t     { }
-Sin|SIN|sin|sinus|Sinus|SINUS { return SIN;  }
-Cos|COS|cos { return COS;  }
-un      { yylval.valeur = 1. ; return NUM; }
-deux    { yylval.valeur = 2. ; return NUM; }
-trois   { yylval.valeur = 3. ; return NUM; }
-plus    { return '+';}
-fois    { return '*'; }
-Si      { return SI;}
-Alors   { return ALORS;}
-Sinon   { return SINON;}
-FinSi   { return FINSI;}
+    /* Nombres */
+[0-9]+(\.[0-9]*)?([Ee][+-]?[0-9]+)? {
+    yylval.valeur = atof(yytext);
+    return NUM;
+}
 
-[A-Za-z_][A-Za-z_0-9]* { strcpy( yylval.nom, yytext) ;  return VAR; }
+\n {  return '\n'; }
+\r { }
+\t { }
+" " { }
 
-\+     {  return yytext[0];  }  // la même chose que return '+'  
-"-"    {  return '-'; }
-"*"    {  return '*'; }
-"/"    {  return '/'; }
-"="|"<-"    {  return '='; }
-">"    { return SUP; }
-\(     {  return '('; }
-\)     {  return ')'; }
-<<EOF>>  { printf("\nLe programme est correct!\n"); return 0; }
-.      {  printf ("Erreur lexicale : %s\n", yytext); return 0; }
+    /* Mots réservés */
+"écrire" { return PRINT; }
+"vaut" { return VAUT; }
+
+    /* Nom de variable */
+[A-Za-z_][A-Za-z_0-9]* {
+    strcpy( yylval.nom, yytext); 
+    return VAR;
+}
+
+    /* Opérateurs */
+"+" { return '+'; }
+"-" { return '-'; }
+"*" { return '*'; }
+"/" { return '/'; }
+"(" { return '('; }
+")" { return ')'; }
+
+    /* Fin du programme */
+<<EOF>> {
+    printf("\nLe programme est correct!\n\n");
+    return 0;
+}
+. {
+    printf ("Erreur lexicale : %s\n\n", yytext);
+    return 0;
+}
 
 %%

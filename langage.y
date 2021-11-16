@@ -1,65 +1,65 @@
 %{
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <cmath>   
-  #include <map>
-  #include <string>
+    #include <iostream>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <cmath>   
+    #include <map>
+    #include <string>
 
-  using namespace std;
+    using namespace std;
 
-  extern int yylex ();
-  extern char* yytext;
-  extern FILE* yyin;
-  int yyerror(char *s);
+    extern int yylex ();
+    extern char* yytext;
+    extern FILE* yyin;
+    int yyerror(char *s);
 
-  // Déclaration de la map qui associe
-  // les noms des variables à leur valeur
-  map<string,double> variables ;
-
+    // Map associant chaque variable à sa valeur
+    map<string,double> variables ;
 %}
 
 %union {
-  double valeur;
-  char nom[50];
+    double valeur;
+    char nom[50];
 }
 
 %token <valeur> NUM
 %token <nom> VAR
-%type <valeur> expr 
-%token SIN
-%token COS
-%token SI
-%token ALORS
-%token SINON
-%token FINSI
-%token SUP
+%type <valeur> expr
+%token PRINT
+%token VAUT
 
-%right '+' '-'
-%left '*' '/'
+%left '+' '-'
+%right '*' '/'
 
 %%
-bloc:  /* Epsilon */
-     | bloc instruction '\n'   
+bloc :
+/* Epsilon */
+| bloc instruction '\n'   
 
-instruction :   /* Epsilon, ligne vide */
-            | expr         { printf ("\n"); }
-            | VAR '=' expr {  }
-            | SI '(' expr SUP expr ')' '\n'
-              ALORS '\n'
-                bloc
-              SINON '\n'
-                bloc
-              FINSI               {  }
+instruction :
+/* Epsilon */
+| expr { printf("Résultat : %g", $1); }
+| VAR VAUT expr {
+    variables[$1] = $3;
+}
+| PRINT expr { cout << $2; }
 
-expr:  NUM               { printf ("%g ",$1);  }
-     | VAR               {  }
-     | SIN '(' expr ')'  {  }
-     | COS '(' expr ')'  {  }
-     | '(' expr ')'      {  }
-     | expr '+' expr     {  printf ("+ "); }
-     | expr '-' expr     {  }   		
-     | expr '*' expr     {  printf ("* ");}		
-     | expr '/' expr     {  }    
+expr :
+NUM { $$ = $1; }
+| VAR { 
+    try {
+        $$ = variables.at($1);
+    }
+    catch(...) {
+        printf("La variable %s est utilisée mais jamais initialisée", $1);
+        variables[$1] = 0;
+    }
+ }
+| '(' expr ')' { $$ = $2; }
+| expr '+' expr { $$ = $1 + $3; }
+| expr '-' expr { $$ = $1 - $3; }   		
+| expr '*' expr { $$ = $1 * $3; }		
+| expr '/' expr { $$ = $1 / $3; }    
 %%
 
 int yyerror(char *s) {					
@@ -67,7 +67,9 @@ int yyerror(char *s) {
 }
 
 int main(int argc, char **argv) {
-  printf("-----------------\nLangage  V1.0\n");
+  printf("\n------------------------------------\n");
+  printf("| Langage de Programmation Molière |\n");
+  printf("------------------------------------\n\n");
 
   // Code pour traiter un fichier au lieu de l'entrée clavier
   if ( argc > 1 )
