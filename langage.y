@@ -55,23 +55,9 @@
 %type <valeur> expr
 
 %token <valeur> NUM
-%token <nom> VAR
-
-%token <adresse> IF
-%token ELSE
-
-%token END
-
-%token <nom> LABEL
-%token GOTO
-
-%token ASSIGN
-
-%token PRINT
-
-%token JMP JMPCOND
-
-%token SUP INF SUPEQ INFEQ EQ INEQ
+%token <nom> VAR LABEL
+%token <adresse> IF WHILE DOWHILE
+%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND SUP INF SUPEQ INFEQ EQ INEQ
 
 %left ADD SUB
 %right MUL DIV
@@ -81,20 +67,37 @@ bloc :
 /* Epsilon */
 | bloc label instruction '\n'  
 
+
+
 label :
 /* Epsilon */
 | LABEL ':' { adresses[$1] = ic; }
 
+
+
 instruction :
 /* Epsilon */
-| expr                  { }
-| VAR ASSIGN expr       { add_instruction(ASSIGN, 0, $1); }
-| PRINT expr            { add_instruction(PRINT); }
-| GOTO LABEL            { add_instruction(JMP, -999, $2); }
+| expr                    { }
+| ASSIGN VAR ASSIGN2 expr { add_instruction(ASSIGN, 0, $2); }
+| PRINT expr              { add_instruction(PRINT); }
+| GOTO LABEL              { add_instruction(JMP, -999, $2); }
+
 | IF condition ':' '\n' { $1.jc = ic; add_instruction(JMPCOND); }
 bloc                    { $1.jmp = ic; add_instruction(JMP); code_genere[$1.jc].value = ic; }
 ELSE  ':' '\n' bloc     { }
-END                   { code_genere[$1.jmp].value = ic; }
+END                     { code_genere[$1.jmp].value = ic; }
+
+| WHILE            { $1.jmp = ic; }
+condition ':' '\n' { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); }
+bloc               { }
+END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
+
+| DOWHILE          { add_instruction(JMP); $1.jmp = ic; }
+condition ':' '\n' { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); code_genere[$1.jmp - 1].value = ic;}
+bloc               { }
+END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
+
+
 
 expr :
 NUM             { add_instruction(NUM, $1); }
@@ -104,6 +107,8 @@ NUM             { add_instruction(NUM, $1); }
 | expr SUB expr { add_instruction(SUB); }
 | expr MUL expr { add_instruction(MUL); }
 | expr DIV expr { add_instruction(DIV); }
+
+
 
 condition :
 expr               { }

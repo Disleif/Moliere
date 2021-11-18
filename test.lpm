@@ -1,20 +1,5 @@
-(Assignation de variables)
-a vaut 5
-b vaut 3
-
-(Ecriture et opération)
-Ecrire a - b
-
-(Condition : > )
-Si 2 supérieur à 1,5 :
-    Ecrire 1
-Sinon :
-    Ecrire 0
-Fin
-
-(Condition : !=)
-Si 3 * a n'est pas équivalent à 5 * b :
-    Ecrire 1
-Sinon :
-    Ecrire 0
+Assigner à ma_Variable la valeur 5
+Effectuer puis répéter tant que ma_Variable est supérieur ou égal à 1 :
+    Afficher ma_Variable
+    Assigner à ma_Variable la valeur ma_Variable - 1
 Fin
