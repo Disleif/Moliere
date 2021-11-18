@@ -42,24 +42,11 @@ Programme :
 
 /!\ Types + creation de variables
 
-###SI PAS AUTOMATIQUE
-short : petit entier
-int : entier
-long : grand entier
-long long : très grand entier
-float : réel
-char : caractère
-string : chaîne de caractères
-unsigned [type] : [type] positif
-
-Nouveau/Nouvel/Nouvelle [type] x valant / égale à y(, a valant b, ...).
-//!\\ Nouveau/Nouvel/Nouvelle exigés au pluriel si multiples assignations
-
 ###SI AUTOMATIQUE
 variable
 
-Nouvelle variable var1 égale à 6
-Nouvelles variables var1 valant 6, var2 égale à 7 et var3 égale à 8.
+Nouvelle variable var1 égale à 6.
+Nouvelles variables var1 valant 6, var2 égale à 7 et var3 qui vaut 8.
 
 /!\ Affectation variables
 Assigner / Donner à x la valeur y.
@@ -109,7 +96,7 @@ Effectuer puis répéter tant que (CONDITION) :
     ...
 
 /!\ cout // print
-Afficher / Ecrire myString + "blabla".
+Afficher / Ecrire / Affichage de myString + "blabla".
 
 /!\ cin // scanf
 Demander myVar.
