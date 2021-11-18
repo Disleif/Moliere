@@ -65,7 +65,7 @@
 %%
 bloc :
 /* Epsilon */
-| bloc label instruction '\n'  
+| bloc label instruction '.'  
 
 
 
@@ -82,18 +82,18 @@ instruction :
 | PRINT expr              { add_instruction(PRINT); }
 | GOTO LABEL              { add_instruction(JMP, -999, $2); }
 
-| IF condition ':' '\n' { $1.jc = ic; add_instruction(JMPCOND); }
+| IF condition ':'      { $1.jc = ic; add_instruction(JMPCOND); }
 bloc                    { $1.jmp = ic; add_instruction(JMP); code_genere[$1.jc].value = ic; }
-ELSE  ':' '\n' bloc     { }
+ELSE  ':'      bloc     { }
 END                     { code_genere[$1.jmp].value = ic; }
 
 | WHILE            { $1.jmp = ic; }
-condition ':' '\n' { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); }
+condition ':'      { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); }
 bloc               { }
 END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
 
 | DOWHILE          { add_instruction(JMP); $1.jmp = ic; }
-condition ':' '\n' { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); code_genere[$1.jmp - 1].value = ic;}
+condition ':'      { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); code_genere[$1.jmp - 1].value = ic;}
 bloc               { }
 END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
 
