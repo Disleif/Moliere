@@ -7,15 +7,15 @@
 %}
 
 %%
-"Afficher"|"Ecrire"               { return PRINT; }
-"Assigner à"|"Donner à"           { return ASSIGN; }
-"la valeur"                       { return ASSIGN2; }
-"Si"                              { return IF; }
-"Sinon"                           { return ELSE; }
-"Tant que"                        { return WHILE; }
-"Effectuer puis répéter tant que" { return DOWHILE; }
-"Fin"                             { return END; }
-"Aller à"                         { return GOTO; }
+"Afficher"|"Ecrire"|"Affichage de" { return PRINT; }
+"Assigner à"|"Donner à"            { return ASSIGN; }
+"la valeur"                        { return ASSIGN2; }
+"Si"                               { return IF; }
+"Sinon"                            { return ELSE; }
+"Tant que"                         { return WHILE; }
+"Effectuer puis répéter tant que"  { return DOWHILE; }
+"Fin"                              { return END; }
+"Aller à"                          { return GOTO; }
 
 "est "?"supérieur à"         { return SUP; }
 "est "?"inférieur à"         { return INF; }
@@ -37,10 +37,11 @@
 ", faire "?":" { return ':'; }
 
 "°".* { }
-\n    { return '\n'; }
+\n    { }
 \r    { }
 \t    { }
 " "   { }
+"."   { return '.'; }
 
 <<EOF>> { printf("Le programme est correct!\n\n"); return 0; }
 .       { printf("Erreur lexicale : %s\n\n", yytext); return 0; }
