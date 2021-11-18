@@ -1,5 +1,5 @@
-a vaut 5
-Tant que a supérieur ou égal à 1:
-    Afficher a
-    a vaut a - 1
+Assigner à ma_Variable la valeur 5
+Effectuer puis répéter tant que ma_Variable est supérieur ou égal à 1 :
+    Afficher ma_Variable
+    Assigner à ma_Variable la valeur ma_Variable - 1
 Fin
