@@ -1,3 +1,23 @@
+Actuellement déjà abordé :
+
+-commentaires 
+-comparaison (ajouter and et or)
+-retours à la ligne
+-entrée dans programme
+-types de variables
+-création de variables
+-Affectation de valeurs à des variables
+-If/For classique/While/Do_While
+-Print/Get/Return
+-incrémentations/décrémentations
+
+A aborder :
+
+-condition ternaires
+-for of/in
+-acces propriétés variables (ex : var.length -> Longueure de var, ...type, taille)
+-méthodes variables selon type (ex : myTab.push(myVar) -> Ajouter myVar à myTab)
+
 //!\\ possibilité d'écrire "et" au lieu de "," pour dernière opération 
 //!\\ ne pas autoriser les initialisations : var = 1, : obliger chiffre
 //!\\ répétition 
@@ -10,7 +30,7 @@ Répéter x fois :
 Programme :
 
 /!\ commentaires
-(...)
+°blabla
 
 /!\ types de vars
 short : petit entier
@@ -23,14 +43,28 @@ string : chaîne de caractères
 unsigned [type] : [type] positif
 
 /!\ création vars
-Nouveau/Nouvel/Nouvelle nombre/ [type] x valant y(, a valant b, ...).
+Nouveau/Nouvel/Nouvelle [type] x valant y(, a valant b, ...).
 //!\\ Nouveau/Nouvel/Nouvelle exigés au pluriel si multiples assignations
 
 /!\ affectation var
-Assigner y à x.
+Assigner / Donner à x la valeur y.
+
+/!\ comparaison
+> : est supérieur à / supérieur à
+>= : est supérieur ou égal à / supérieur ou égal à
+< : est inférieur à / inférieur à
+<= : est inférieur ou égal à / inférieur ou égal à
+== : est égal à / égal à / vaut
+!= : est différent de / différent de
+
+/!\ incrémentations décrémentations
+x++ : incrémenter x.
+x-- : décrémenter x.
+++x : préincrémenter x.
+--x : prédécrémenter x.
 
 /!\ Condition
-Si x est égale à Vrai :
+Si x est égal à Vrai :
     ...
 Si x est supérieur ou égal à y :
     ...
@@ -39,8 +73,8 @@ Sinon :
 Fin
 
 /!\ boucle for
-Pour ... tant que (CONDITION), en répétant (ACTION) :
-      |
+Pour ... tant que (CONDITION), faire :
+      |etapes iterations + iterations
       V
 Pour x, ...
 Pour un nouvel ... i valant ..., ...
@@ -58,7 +92,7 @@ Effectuer puis répéter tant que (CONDITION) :
     ...
 
 /!\ cout // print
-Ecrire myString + "blabla".
+Afficher / Ecrire myString + "blabla".
 
 /!\ cin // scanf
 Demander myVar.
@@ -66,5 +100,6 @@ Demander myVar.
 /!\ return
 Retourner myVar.
 
-/!\
+/!\ ternaire
+
 

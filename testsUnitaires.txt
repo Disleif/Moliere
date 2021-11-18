@@ -1,20 +1,21 @@
 Programme :
 
-  Ecrire "Creation variable var1 valant 9" + Retour à la ligne.
+  Afficher "Creation variable var1 valant 9" + Retour à la ligne.
   Nouvel entier var1 valant 9.
   
-  Ecrire "Affichage valeur de var1 : " + var1 + Retour à la ligne.
+  Afficher "Affichage valeur de var1 : " + var1 + Retour à la ligne.
 
-  Ecrire "Ajout de 1 à var1 ( 9 + 1 )".
-  Assigner 1 + var1 à var1.
+  Afficher "Ajout de 1 à var1 ( 9 + 1 )".
+  Assigner à var1 la valeur 1 + var1.
 
-  Ecrire "Affichage valeur de var1 : " + var1 + Retour à la ligne.
+  Afficher "Affichage valeur de var1 : " + var1 + Retour à la ligne.
 
   Si var1 vaut Vrai :
 
     Appel de texteComptage avec var1.
 
-    Pour un nouvel entier i valant 0, tant que i < var1, en répétant i++ :
-      Ecrire i.
+    Pour un nouvel entier i valant 0, tant que i est inférieur à var1, faire :
+      Afficher i.
+      Post-incrémenter i.
 
 
