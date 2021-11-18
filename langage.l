@@ -7,12 +7,12 @@
 %}
 
 %%
-"Ecrire"  { return PRINT; }
-"vaut"    { return ASSIGN; }
-"Si"      { return IF; }
-"Sinon"   { return ELSE; }
-"Fin"     { return END; }
-"Aller à" { return GOTO; }
+"Afficher" { return PRINT; }
+"vaut"     { return ASSIGN; }
+"Si"       { return IF; }
+"Sinon"    { return ELSE; }
+"Fin"      { return END; }
+"Aller à"  { return GOTO; }
 
 [0-9]+(\,[0-9]*)?([Ee][+-]?[0-9]+)? { yylval.valeur = atof(yytext); return NUM; }
 [A-Za-z_][A-Za-z_0-9]*              { strcpy( yylval.nom, yytext); return VAR; }
@@ -33,7 +33,7 @@
 "équivalent à"           { return EQ; }
 "n'est pas équivalent à" { return INEQ; }
 
-"(".*")" { }
+"//".*   { }
 \n       { return '\n'; }
 \r       { }
 \t       { }

@@ -55,23 +55,9 @@
 %type <valeur> expr
 
 %token <valeur> NUM
-%token <nom> VAR
-
+%token <nom> VAR LABEL
 %token <adresse> IF
-%token ELSE
-
-%token END
-
-%token <nom> LABEL
-%token GOTO
-
-%token ASSIGN
-
-%token PRINT
-
-%token JMP JMPCOND
-
-%token SUP INF SUPEQ INFEQ EQ INEQ
+%token ELSE END GOTO ASSIGN PRINT JMP JMPCOND SUP INF SUPEQ INFEQ EQ INEQ
 
 %left ADD SUB
 %right MUL DIV
@@ -94,7 +80,7 @@ instruction :
 | IF condition ':' '\n' { $1.jc = ic; add_instruction(JMPCOND); }
 bloc                    { $1.jmp = ic; add_instruction(JMP); code_genere[$1.jc].value = ic; }
 ELSE  ':' '\n' bloc     { }
-END                   { code_genere[$1.jmp].value = ic; }
+END                     { code_genere[$1.jmp].value = ic; }
 
 expr :
 NUM             { add_instruction(NUM, $1); }
