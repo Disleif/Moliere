@@ -7,7 +7,7 @@ fonctionnalités :
 code :
 -Entrée dans programme
 -Commentaires 
--Types de variables
+-Types + creation de variables
 -Création de variables
 -Affectation variables
 -Comparaisons (ajouter and et or)
@@ -16,17 +16,18 @@ code :
 -If/For classique/While/Do_While
 -cout // print
 -cin // scanf
+-appels fonctions
 -return
+-condition ternaires
 
 A aborder :
 
--condition ternaires
 -for of/in
 -acces propriétés variables (ex : var.length -> Longueure de var, ...type, taille)
 -méthodes variables selon type (ex : myTab.push(myVar) -> Ajouter myVar à myTab)
 
-//!\\ possibilité d'écrire "et" au lieu de "," pour dernière opération 
-//!\\ ne pas autoriser les initialisations : var = 1, : obliger chiffre
+//!\\ écrire "et" au lieu de "," pour dernière opération lorsque plusieurs
+//!\\ dans un affichage : si ! fin de ligne, tout passer en maj
 //!\\ répétition 
 Répéter x fois : 
     ...
@@ -39,19 +40,13 @@ Programme :
 /!\ Commentaires
 °blabla
 
-/!\ Types de variables
-short : petit entier
-int : entier
-long : grand entier
-long long : très grand entier
-float : réel
-char : caractère
-string : chaîne de caractères
-unsigned [type] : [type] positif
+/!\ Types + creation de variables
 
-/!\ Création variables
-Nouveau/Nouvel/Nouvelle [type] x valant y(, a valant b, ...).
-//!\\ Nouveau/Nouvel/Nouvelle exigés au pluriel si multiples assignations
+###SI AUTOMATIQUE
+variable
+
+Nouvelle variable var1 égale à 6.
+Nouvelles variables var1 valant 6, var2 égale à 7 et var3 qui vaut 8.
 
 /!\ Affectation variables
 Assigner / Donner à x la valeur y.
@@ -87,10 +82,8 @@ Pour ... tant que (CONDITION), faire :
       |etapes iterations + iterations
       V
 Pour x, ...
-Pour un nouvel ... i valant ..., ...
-Pour une nouvelle ... j valant ..., ...
-Pour des nouvelles ... k valant ..., ...
-Pour des nouveaux ... l valant ..., ...
+Pour une nouvelle variable j valant ..., 
+Pour des nouvelles var k valant ..., ...
     ...
 
 /!\ While
@@ -103,10 +96,13 @@ Effectuer puis répéter tant que (CONDITION) :
     ...
 
 /!\ cout // print
-Afficher / Ecrire myString + "blabla".
+Afficher / Ecrire / Affichage de myString + "blabla".
 
 /!\ cin // scanf
 Demander myVar.
+
+/!\ appels fonctions
+Appeller myFunc avec arg1, arg2 et arg3.
 
 /!\ return
 Retourner myVar.

@@ -1,20 +1,23 @@
-Programme :
+°Test de la fonction d'affichage et de creation de variable nombre entier
+Afficher "Creation variable var1" + Retour à la ligne.
+Nouvelle variable var1 égale à 9.
 
-  Afficher "Creation variable var1 valant 9" + Retour à la ligne.
-  Nouvel entier var1 valant 9.
-  
-  Afficher "Affichage valeur de var1 : " + var1 + Retour à la ligne.
+°Test affichage avec concaténation
+Afficher "Affichage valeur de var1 : " + var1 + Retour à la ligne.
 
-  Afficher "Ajout de 1 à var1 ( 9 + 1 )".
-  Assigner à var1 la valeur 1 + var1.
+°Test d'assignation de valeur à une variable 
+Assigner à var1 la valeur 1 + var1.
+Afficher "Valeur de var1 apres incrementation manuelle : " + var1.
 
-  Afficher "Affichage valeur de var1 : " + var1 + Retour à la ligne.
+°Test postincrémentation 
+Assigner à var1 la valeur var1++.
+Afficher "Valeur avec postincrémentation : " + var1.
 
-  Si var1 vaut Vrai :
+°Test préincrémentation
+Afficher "Valeur de var1 avec préincrémentation : " + ++var1;
 
-    Appel de texteComptage avec var1.
+°Test If 
+Si var1 vaut Vrai : Affichage de "var1 est vrai".
 
-    °Affichage des entiers croissant de 0 à var1 - 1
-    Pour un nouvel entier i valant 0, tant que i est inférieur à var1, faire :
-      Afficher i.
-      i++.
+°Test ternaire
+var1 inférieur à 5 ? Si oui : Afficher "var1 est ridicuuuule", Si non : Ecrire "var1 est incroyable".
