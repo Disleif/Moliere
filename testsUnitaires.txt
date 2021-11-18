@@ -14,6 +14,7 @@ Programme :
 
     Appel de texteComptage avec var1.
 
+    °Affichage des entiers croissant de 0 à var1 - 1
     Pour un nouvel entier i valant 0, tant que i est inférieur à var1, faire :
       Afficher i.
       i++.

@@ -95,6 +95,7 @@ Pour des nouveaux ... l valant ..., ...
 
 /!\ While
 Tant que x est supérieur à y :
+Tant que x est supérieur à y, faire :
     ...
 
 /!\ Do_While
