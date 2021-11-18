@@ -1,15 +1,22 @@
 Actuellement déjà abordé :
 
--commentaires 
--comparaison (ajouter and et or)
--retours à la ligne
--entrée dans programme
--types de variables
--création de variables
--Affectation de valeurs à des variables
+fonctionnalités : 
+-Acces à e :  1e234 pour 1*10^234
+-Instructions multiples choix : est égal à / égal à
+
+code :
+-Entrée dans programme
+-Commentaires 
+-Types de variables
+-Création de variables
+-Affectation variables
+-Comparaisons (ajouter and et or)
+-Retours à la ligne
+-Incrémentations/Décrémentations
 -If/For classique/While/Do_While
--Print/Get/Return
--incrémentations/décrémentations
+-cout // print
+-cin // scanf
+-return
 
 A aborder :
 
@@ -23,16 +30,16 @@ A aborder :
 //!\\ répétition 
 Répéter x fois : 
     ...
-//!\\ Retour à la ligne dans chaîne de caractères
-    "\n" / Retour à la ligne <---- comme variable
 
-/!\ main
+-----------------------------------------------------
+
+/!\ Entrée dans programme
 Programme :
 
-/!\ commentaires
+/!\ Commentaires
 °blabla
 
-/!\ types de vars
+/!\ Types de variables
 short : petit entier
 int : entier
 long : grand entier
@@ -42,14 +49,14 @@ char : caractère
 string : chaîne de caractères
 unsigned [type] : [type] positif
 
-/!\ création vars
+/!\ Création variables
 Nouveau/Nouvel/Nouvelle [type] x valant y(, a valant b, ...).
 //!\\ Nouveau/Nouvel/Nouvelle exigés au pluriel si multiples assignations
 
-/!\ affectation var
+/!\ Affectation variables
 Assigner / Donner à x la valeur y.
 
-/!\ comparaison
+/!\ Comparaisons
 > : est supérieur à / supérieur à
 >= : est supérieur ou égal à / supérieur ou égal à
 < : est inférieur à / inférieur à
@@ -57,13 +64,16 @@ Assigner / Donner à x la valeur y.
 == : est égal à / égal à / vaut
 != : est différent de / différent de
 
-/!\ incrémentations décrémentations
-x++ : incrémenter x.
-x-- : décrémenter x.
-++x : préincrémenter x.
---x : prédécrémenter x.
+/!\ Retours à la ligne
+    "\n" / Retour à la ligne <---- comme variable
 
-/!\ Condition
+/!\ Incrémentations/Décrémentations
+x++ 
+x--
+++x 
+--x 
+
+/!\ If
 Si x est égal à Vrai :
     ...
 Si x est supérieur ou égal à y :
@@ -72,7 +82,7 @@ Sinon :
     ...
 Fin
 
-/!\ boucle for
+/!\ For classique
 Pour ... tant que (CONDITION), faire :
       |etapes iterations + iterations
       V
@@ -83,11 +93,11 @@ Pour des nouvelles ... k valant ..., ...
 Pour des nouveaux ... l valant ..., ...
     ...
 
-/!\ boucle while
+/!\ While
 Tant que x est supérieur à y :
     ...
 
-/!\ boucle do while
+/!\ Do_While
 Effectuer puis répéter tant que (CONDITION) :
     ...
 
@@ -101,5 +111,6 @@ Demander myVar.
 Retourner myVar.
 
 /!\ ternaire
-
+A est inférieur à 10 ? Si oui : Ecrire A, Si non : Ecrire "Supérieur".
+A inférieur à 10 ? Ecrire A / Ecrire "Supérieur".
 

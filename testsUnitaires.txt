@@ -16,6 +16,4 @@ Programme :
 
     Pour un nouvel entier i valant 0, tant que i est inférieur à var1, faire :
       Afficher i.
-      Post-incrémenter i.
-
-
+      i++.
