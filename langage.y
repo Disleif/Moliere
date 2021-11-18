@@ -56,7 +56,7 @@
 
 %token <valeur> NUM
 %token <nom> VAR LABEL
-%token <adresse> IF
+%token <adresse> IF WHILE
 %token ELSE END GOTO ASSIGN PRINT JMP JMPCOND SUP INF SUPEQ INFEQ EQ INEQ
 
 %left ADD SUB
@@ -67,9 +67,13 @@ bloc :
 /* Epsilon */
 | bloc label instruction '\n'  
 
+
+
 label :
 /* Epsilon */
 | LABEL ':' { adresses[$1] = ic; }
+
+
 
 instruction :
 /* Epsilon */
@@ -77,10 +81,18 @@ instruction :
 | VAR ASSIGN expr       { add_instruction(ASSIGN, 0, $1); }
 | PRINT expr            { add_instruction(PRINT); }
 | GOTO LABEL            { add_instruction(JMP, -999, $2); }
+
 | IF condition ':' '\n' { $1.jc = ic; add_instruction(JMPCOND); }
 bloc                    { $1.jmp = ic; add_instruction(JMP); code_genere[$1.jc].value = ic; }
 ELSE  ':' '\n' bloc     { }
 END                     { code_genere[$1.jmp].value = ic; }
+
+| WHILE            { $1.jmp = ic; }
+condition ':' '\n' { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); }
+bloc               { }
+END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
+
+
 
 expr :
 NUM             { add_instruction(NUM, $1); }
@@ -90,6 +102,8 @@ NUM             { add_instruction(NUM, $1); }
 | expr SUB expr { add_instruction(SUB); }
 | expr MUL expr { add_instruction(MUL); }
 | expr DIV expr { add_instruction(DIV); }
+
+
 
 condition :
 expr               { }

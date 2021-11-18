@@ -11,6 +11,7 @@
 "vaut"     { return ASSIGN; }
 "Si"       { return IF; }
 "Sinon"    { return ELSE; }
+"Tant que" { return WHILE; }
 "Fin"      { return END; }
 "Aller à"  { return GOTO; }
 
@@ -26,18 +27,18 @@
 ")" { return ')'; }
 ":" { return ':'; }
 
-"supérieur à"            { return SUP; }
-"inférieur à"            { return INF; }
-"supérieur ou égal à"    { return SUPEQ; }
-"inférieur ou égal à"    { return INFEQ; }
-"équivalent à"           { return EQ; }
-"n'est pas équivalent à" { return INEQ; }
+"est supérieur à"         { return SUP; }
+"est inférieur à"         { return INF; }
+"est supérieur ou égal à" { return SUPEQ; }
+"est inférieur ou égal à" { return INFEQ; }
+"est égal à"              { return EQ; }
+"est différent de"        { return INEQ; }
 
-"//".*   { }
-\n       { return '\n'; }
-\r       { }
-\t       { }
-" "      { }
+"°".* { }
+\n    { return '\n'; }
+\r    { }
+\t    { }
+" "   { }
 
 <<EOF>> { printf("Le programme est correct!\n\n"); return 0; }
 .       { printf("Erreur lexicale : %s\n\n", yytext); return 0; }

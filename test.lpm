@@ -1,20 +1,5 @@
-// Assignation de variables
 a vaut 5
-b vaut 3
-
-// Ecriture et opération
-Afficher a - b
-
-// Condition : (>)
-Si 2 supérieur à 1,5 :
-    Afficher 1
-Sinon :
-    Afficher 0
-Fin
-
-// Condition : (!=)
-Si 4 * a n'est pas équivalent à 5 * b :
-    Afficher 1
-Sinon :
-    Afficher 0
+Tant que a supérieur ou égal à 1:
+    Afficher a
+    a vaut a - 1
 Fin
