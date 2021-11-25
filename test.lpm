@@ -1,5 +1,3 @@
-Assigner à ma_Variable la valeur 5.
-Effectuer puis répéter tant que ma_Variable est supérieur ou égal à 1 :  
-  Afficher ma_Variable.
-  Assigner à ma_Variable la valeur ma_Variable - 1.
-Fin
+Assigner à x la valeur 3.
+Ecrire x++.
+Ecrire x.

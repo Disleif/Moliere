@@ -57,9 +57,9 @@
 %token <valeur> NUM
 %token <nom> VAR LABEL
 %token <adresse> IF WHILE DOWHILE
-%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND SUP INF SUPEQ INFEQ EQ INEQ
+%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND SUP INF SUPEQ INFEQ EQ INEQ INC DEC
 
-%left ADD SUB
+%left ADD SUB 
 %right MUL DIV
 
 %%
@@ -100,13 +100,17 @@ END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic
 
 
 expr :
-NUM             { add_instruction(NUM, $1); }
-| VAR           { add_instruction(VAR, 0, $1); }
-| '(' expr ')'  { }
-| expr ADD expr { add_instruction(ADD); }
-| expr SUB expr { add_instruction(SUB); }
-| expr MUL expr { add_instruction(MUL); }
-| expr DIV expr { add_instruction(DIV); }
+NUM                 { add_instruction(NUM, $1); }
+| VAR               { add_instruction(VAR, 0, $1); }
+| '(' expr ')'      { }
+| expr ADD expr     { add_instruction(ADD); }
+| expr SUB expr     { add_instruction(SUB); }
+| expr MUL expr     { add_instruction(MUL); }
+| expr DIV expr     { add_instruction(DIV); }
+| INC VAR          { add_instruction(VAR, 0, $2); add_instruction(INC); }
+| VAR INC          { add_instruction(VAR, 0, $1); add_instruction(INC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(DEC);}
+| DEC VAR          { add_instruction(VAR, 0, $2); add_instruction(DEC); }
+| VAR DEC          { add_instruction(VAR, 0, $1); add_instruction(DEC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(INC);}
 
 
 
@@ -132,6 +136,8 @@ string print_code(int ins) {
     case SUB      : return "SUB";
     case MUL      : return "MUL";
     case DIV      : return "DIV";
+    case INC   : return "INC";
+    case DEC   : return "DEC";
     case SUP      : return "SUP";
     case INF      : return "INF";
     case SUPEQ    : return "SUPEQ";
@@ -193,6 +199,20 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
         r1 = pile.top();
         pile.pop();
         pile.push(r1 / r2);
+        ic++;
+        break;
+        
+      case INC:
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 + 1);
+        ic++;
+        break;
+
+      case DEC:
+        r1 = pile.top();
+        pile.pop();
+        pile.push(r1 - 1);
         ic++;
         break;
 
