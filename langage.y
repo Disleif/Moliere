@@ -15,7 +15,7 @@
 
   class instruction {
   public:
-    instruction (const int &c, const double &v=0, const string &n="") : code(c), value(v), name(n) {};  
+    instruction (const int &c, const double &v=0, const string &n="") : code(c), value(v), name(n) {};
     int code;         // Code de l'instruction (ADD, VAR, ...)
     double value;     // Une valeur si besoin (VAR 5, VAR 2, ...)
     string name;      // Une référence pour la table des données (Nom de variable)
@@ -28,15 +28,15 @@
   map<string,int> adresses;
 
   // Structure pour accueillir le code généré
-  vector<instruction> code_genere;    
+  vector<instruction> code_genere;
   int ic = 0;
 
   // Permet d'ajouter une instruction à "code_genere"
   int add_instruction(const int &c, const double &v=0, const string &n="") {
-    code_genere.push_back(instruction(c,v,n)); 
+    code_genere.push_back(instruction(c,v,n));
     ic++;
-    return 0; 
-  }; 
+    return 0;
+  };
 %}
 
 %code requires {
@@ -65,7 +65,7 @@
 %%
 bloc :
 /* Epsilon */
-| bloc label instruction '.'  
+| bloc label instruction '.'
 
 
 
@@ -124,11 +124,11 @@ expr               { }
 |  expr INEQ expr  { add_instruction(INEQ); }
 %%
 
-int yyerror(char *s) {					
+int yyerror(char *s) {
   printf("%s : %s\n", s, yytext);
 }
 
-// Fonction pour mieux voir le code généré 
+// Fonction pour mieux voir le code généré
 // (au lieu des nombres associés au tokens)
 string print_code(int ins) {
   switch (ins) {
@@ -316,9 +316,9 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
 }
 
 int main(int argc, char **argv) {
-  printf("\n------------------------------------\n");
-  printf("| Langage de Programmation Molière |\n");
-  printf("------------------------------------\n\n");
+  printf("┌──────────────────────────────────┐\n");
+  printf("│ Langage de Programmation Molière │\n");
+  printf("└──────────────────────────────────┘\n\n");
 
   // Code pour traiter un fichier au lieu de l'entrée clavier
   if ( argc > 1 ) yyin = fopen( argv[1], "r" );
@@ -332,11 +332,11 @@ int main(int argc, char **argv) {
     auto instruction = code_genere [i];
     cout << i
          << '\t'
-         << print_code(instruction.code) 
+         << print_code(instruction.code)
          << '\t'
-         << instruction.value 
-         << '\t' 
-         << instruction.name 
+         << instruction.value
+         << '\t'
+         << instruction.name
          << endl;
   }
 
