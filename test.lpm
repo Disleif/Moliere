@@ -1,3 +1,3 @@
-Nouvelle variable x.
-Ecrire x.
-Ecrire x.
+Pour nouvelle variable i valant 0, i est inférieur à 10, ++i, faire :
+    Afficher i.
+Fin

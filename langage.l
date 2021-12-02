@@ -16,6 +16,8 @@
 "Sinon"                            { return ELSE; }
 "Tant que"                         { return WHILE; }
 "Effectuer puis répéter tant que"  { return DOWHILE; }
+"Pour"                             { return FOR; }
+"appliquer"                        { return APPLY; }
 "Fin"                              { return END; }
 "Aller à"                          { return GOTO; }
 
@@ -38,6 +40,7 @@
 
 "(" { return '('; }
 ")" { return ')'; }
+"," { return ','; }
 ", faire "?":" { return ':'; }
 
 "°".* { }

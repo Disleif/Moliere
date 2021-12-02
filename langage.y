@@ -43,6 +43,9 @@
   typedef struct adr {
     int jmp; // Adresse du jmp
     int jc;  // Adresse du jc
+    int jmpfor3; // Increment du for
+    int jmpfor1;
+    int jmpfor2;
   } type_adresse;
 }
 
@@ -56,8 +59,8 @@
 
 %token <valeur> NUM
 %token <nom> VAR LABEL
-%token <adresse> IF WHILE DOWHILE
-%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVAR NEWVAREQ
+%token <adresse> IF WHILE DOWHILE FOR
+%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVAR NEWVAREQ APPLY
 
 %left ADD SUB 
 %right MUL DIV
@@ -86,7 +89,7 @@ instruction :
 
 | IF condition ':'      { $1.jc = ic; add_instruction(JMPCOND); }
 bloc                    { $1.jmp = ic; add_instruction(JMP); code_genere[$1.jc].value = ic; }
-ELSE  ':'      bloc     { }
+ELSE ':' bloc           { }
 END                     { code_genere[$1.jmp].value = ic; }
 
 | WHILE            { $1.jmp = ic; }
@@ -99,7 +102,11 @@ condition ':'      { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); code_genere[$
 bloc               { }
 END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
 
-
+| FOR NEWVAR VAR NEWVAREQ expr ',' { add_instruction(NEWVAREQ, 0, $3); $1.jmp = ic; }
+condition ','                      { $1.jc = ic; add_instruction(JMPCOND); $1.jmpfor1 = ic; add_instruction(JMP); $1.jmpfor2 = ic;}
+instruction ':'                    { $1.jmpfor3 = ic; add_instruction(JMP); code_genere[$1.jmpfor1].value = ic; }
+bloc                               { add_instruction(JMP, $1.jmpfor2); code_genere[$1.jmpfor3].value = $1.jmp; }
+END                                { code_genere[$1.jc].value = ic; }
 
 expr :
 NUM                 { add_instruction(NUM, $1); }
@@ -109,10 +116,10 @@ NUM                 { add_instruction(NUM, $1); }
 | expr SUB expr     { add_instruction(SUB); }
 | expr MUL expr     { add_instruction(MUL); }
 | expr DIV expr     { add_instruction(DIV); }
-| INC VAR          { add_instruction(VAR, 0, $2); add_instruction(INC); }
-| VAR INC          { add_instruction(VAR, 0, $1); add_instruction(INC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(DEC);}
-| DEC VAR          { add_instruction(VAR, 0, $2); add_instruction(DEC); }
-| VAR DEC          { add_instruction(VAR, 0, $1); add_instruction(DEC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(INC);}
+| INC VAR           { add_instruction(VAR, 0, $2); add_instruction(INC); add_instruction(ASSIGN, 0, $2); add_instruction(VAR, 0, $2); }
+| VAR INC           { add_instruction(VAR, 0, $1); add_instruction(INC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(DEC);}
+| DEC VAR           { add_instruction(VAR, 0, $2); add_instruction(DEC); add_instruction(ASSIGN, 0, $2); add_instruction(VAR, 0, $2); }
+| VAR DEC           { add_instruction(VAR, 0, $1); add_instruction(DEC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(INC);}
 
 
 
@@ -138,8 +145,8 @@ string print_code(int ins) {
     case SUB      : return "SUB";
     case MUL      : return "MUL";
     case DIV      : return "DIV";
-    case INC   : return "INC";
-    case DEC   : return "DEC";
+    case INC      : return "INC";
+    case DEC      : return "DEC";
     case SUP      : return "SUP";
     case INF      : return "INF";
     case SUPEQ    : return "SUPEQ";
@@ -148,6 +155,8 @@ string print_code(int ins) {
     case INEQ     : return "INEQ";
     case NUM      : return "NUM";
     case VAR      : return "VAR";
+    case NEWVAR   : return "NEWVAR";
+    case NEWVAREQ : return "NEWVAREQ";
     case PRINT    : return "OUT";
     case ASSIGN   : return "MOV";
     case JMP      : return "JMP";
