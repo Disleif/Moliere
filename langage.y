@@ -57,7 +57,7 @@
 %token <valeur> NUM
 %token <nom> VAR LABEL
 %token <adresse> IF WHILE DOWHILE
-%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND SUP INF SUPEQ INFEQ EQ INEQ INC DEC
+%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVAR NEWVAREQ
 
 %left ADD SUB 
 %right MUL DIV
@@ -77,10 +77,12 @@ label :
 
 instruction :
 /* Epsilon */
-| expr                    { }
-| ASSIGN VAR ASSIGN2 expr { add_instruction(ASSIGN, 0, $2); }
-| PRINT expr              { add_instruction(PRINT); }
-| GOTO LABEL              { add_instruction(JMP, -999, $2); }
+| expr                     { }
+| NEWVAR VAR { add_instruction(NEWVAR, 0, $2); }
+| NEWVAR VAR NEWVAREQ expr { add_instruction(NEWVAREQ, 0, $2); }
+| ASSIGN VAR ASSIGN2 expr  { add_instruction(ASSIGN, 0, $2); }
+| PRINT expr               { add_instruction(PRINT); }
+| GOTO LABEL               { add_instruction(JMP, -999, $2); }
 
 | IF condition ':'      { $1.jc = ic; add_instruction(JMPCOND); }
 bloc                    { $1.jmp = ic; add_instruction(JMP); code_genere[$1.jc].value = ic; }
@@ -270,10 +272,27 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
         ic++;
         break;
 
-      case ASSIGN:
+      case NEWVAR:
+        variables[ins.name] = NULL;
+        ic++;
+        break;
+
+      case NEWVAREQ:
         r1 = pile.top();
         pile.pop();
         variables[ins.name] = r1;
+        ic++;
+        break;
+
+      case ASSIGN:
+        r1 = pile.top();
+        pile.pop();
+        if ( variables.find(ins.name) == variables.end() ) {
+          cout << "Variable non initialisée : \"" + ins.name + "\"." << endl;
+          return;
+        } else {
+          variables[ins.name] = r1;
+        }
         ic++;
         break;
 
@@ -307,7 +326,7 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
           ic++;
         }
         catch(...) {
-          cout << "Variable non initialisée : \"" << ins.name << "\"" << endl;
+          cout << "Variable non initialisée : \"" << ins.name << "\"." << endl;
           return;
         }
         break;

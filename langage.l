@@ -8,6 +8,8 @@
 
 %%
 "Afficher"|"Ecrire"|"Affichage de" { return PRINT; }
+("n"|"N")"ouvelle variable"        { return NEWVAR; }
+"valant"                           { return NEWVAREQ; }
 "Assigner à"|"Donner à"            { return ASSIGN; }
 "la valeur"                        { return ASSIGN2; }
 "Si"                               { return IF; }
