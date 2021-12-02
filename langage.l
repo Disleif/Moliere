@@ -8,9 +8,9 @@
 
 %%
 "Afficher"|"Ecrire"|"Affichage de" { return PRINT; }
-"Nouvelle variable"                 { return NEWVARM; }
-"nouvelle variable"                 { return NEWVARm; }
-"valant"                           { return NEWVAREQ; }
+"Nouvelle variable"                { return NEWVARM; }
+"nouvelle variable"                { return NEWVARm; }
+"valant"                           { return NEWEQ; }
 "Assigner à"|"Donner à"            { return ASSIGN; }
 "la valeur"                        { return ASSIGN2; }
 "Si"                               { return IF; }
@@ -32,7 +32,7 @@
 "est "?"différent de"        { return INEQ; }
 
 [0-9]+([0-9]*)?(([Ee][+-]?[0-9])|(\,)[0-9]+)? { yylval.valeur = atof(yytext); return NUM; }
-[A-Za-z_][A-Za-z_0-9]*                        { strcpy( yylval.nom, yytext); return VAR; }
+[A-Za-z_][A-Za-z_0-9]*                        { strcpy(yylval.nom, yytext); return VAR; }
 
 "++" { return INC; }
 "--" { return DEC; }
@@ -46,6 +46,7 @@
 "," { return ','; }
 "?" { return TERNARY; }
 ", faire "?":" { return ':'; }
+\".*\" { strcpy(yylval.nom, yytext); return STR; }
 
 "°".* { }
 \n    { }

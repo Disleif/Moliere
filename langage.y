@@ -25,7 +25,7 @@
   map<string, double> variables;
 
   // Map associant chaque label à sa ligne
-  map<string,int> adresses;
+  map<string, int> adresses;
 
   // Structure pour accueillir le code généré
   vector<instruction> code_genere;
@@ -41,26 +41,26 @@
 
 %code requires {
   typedef struct adr {
-    int jmp; // Adresse du jmp
-    int jc;  // Adresse du jc
-    int jmpfor3; // Increment du for
-    int jmpfor1;
-    int jmpfor2;
+    int jmp;     // Adresse du jmp
+    int jc;      // Adresse du jc
+    int jmpfor1; // Jump du for
+    int jmpfor2; // Jump du for
+    int jmpfor3; // Jump du for
   } type_adresse;
 }
 
 %union {
   double valeur;
-  char nom[50];
+  char nom[256];
   type_adresse adresse;
 }
 
 %type <valeur> expr
 
 %token <valeur> NUM
-%token <nom> VAR LABEL
+%token <nom> VAR LABEL STR
 %token <adresse> IF WHILE DOWHILE FOR TERNARY
-%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWVAREQ
+%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWEQ
 
 %left ADD SUB 
 %right MUL DIV
@@ -82,9 +82,10 @@ instruction :
 /* Epsilon */
 | expr                     { }
 | NEWVARM VAR { add_instruction(NEWVARM, 0, $2); }
-| NEWVARM VAR NEWVAREQ expr { add_instruction(NEWVAREQ, 0, $2); }
+| NEWVARM VAR NEWEQ expr { add_instruction(NEWEQ, 0, $2); }
 | ASSIGN VAR ASSIGN2 expr  { add_instruction(ASSIGN, 0, $2); }
-| PRINT expr               { add_instruction(PRINT); }
+| PRINT expr               { add_instruction(PRINT, 0); }
+| PRINT STR                { add_instruction(PRINT, 1, $2); }
 | GOTO LABEL               { add_instruction(JMP, -999, $2); }
 
 | IF condition ':'      { $1.jc = ic; add_instruction(JMPCOND); }
@@ -102,7 +103,7 @@ condition ':'      { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); code_genere[$
 bloc               { }
 END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
 
-| FOR NEWVARm VAR NEWVAREQ expr ',' { add_instruction(NEWVAREQ, 0, $3); $1.jmp = ic; }
+| FOR NEWVARm VAR NEWEQ expr ',' { add_instruction(NEWEQ, 0, $3); $1.jmp = ic; }
 condition ','                      { $1.jc = ic; add_instruction(JMPCOND); $1.jmpfor1 = ic; add_instruction(JMP); $1.jmpfor2 = ic;}
 instruction ':'                    { $1.jmpfor3 = ic; add_instruction(JMP); code_genere[$1.jmpfor1].value = ic; }
 bloc                               { add_instruction(JMP, $1.jmpfor2); code_genere[$1.jmpfor3].value = $1.jmp; }
@@ -164,7 +165,7 @@ string print_code(int ins) {
     case VAR      : return "VAR";
     case NEWVARM  : return "NEWVAR";
     case NEWVARm  : return "NEWVAR";
-    case NEWVAREQ : return "NEWVAREQ";
+    case NEWEQ    : return "NEWEQ";
     case PRINT    : return "OUT";
     case ASSIGN   : return "MOV";
     case JMP      : return "JMP";
@@ -294,7 +295,7 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
         ic++;
         break;
 
-      case NEWVAREQ:
+      case NEWEQ:
         r1 = pile.top();
         pile.pop();
         variables[ins.name] = r1;
@@ -314,9 +315,14 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
         break;
 
       case PRINT:
-        r1 = pile.top();
-        pile.pop();
-        cout << "> " << r1 << endl;
+        if (ins.value == 0) {
+          r1 = pile.top();
+          pile.pop();
+          cout << "> " << r1 << endl;
+        } else {
+          string str = ins.name;
+          cout << "> " << str.substr(1, str.size() - 2) << endl;
+        }
         ic++;
         break;
 
