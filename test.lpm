@@ -1,3 +1,8 @@
 Pour nouvelle variable i valant 0, i est inférieur à 10, ++i, faire :
     Afficher i.
-Fin
+Fin.
+
+nouvelle variable x valant 0.
+Assigner à x la valeur 3.
+
+x supérieur à 4 ? Si oui, faire : Afficher 1, Si non : Ecrire 0.

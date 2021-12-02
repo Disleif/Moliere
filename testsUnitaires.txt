@@ -1,6 +1,6 @@
 °Test de la fonction d'affichage et de creation de variable nombre entier
 Afficher "Creation variable var1" + Retour à la ligne.
-Nouvelle variable var1 égale à 9.
+Nouveau nombre var1 égal à 9.
 
 °Test affichage avec concaténation
 Afficher "Affichage valeur de var1 : " + var1 + Retour à la ligne.

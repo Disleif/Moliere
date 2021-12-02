@@ -59,8 +59,8 @@
 
 %token <valeur> NUM
 %token <nom> VAR LABEL
-%token <adresse> IF WHILE DOWHILE FOR
-%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVAR NEWVAREQ APPLY
+%token <adresse> IF WHILE DOWHILE FOR TERNARY
+%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWVAREQ
 
 %left ADD SUB 
 %right MUL DIV
@@ -81,8 +81,8 @@ label :
 instruction :
 /* Epsilon */
 | expr                     { }
-| NEWVAR VAR { add_instruction(NEWVAR, 0, $2); }
-| NEWVAR VAR NEWVAREQ expr { add_instruction(NEWVAREQ, 0, $2); }
+| NEWVARM VAR { add_instruction(NEWVARM, 0, $2); }
+| NEWVARM VAR NEWVAREQ expr { add_instruction(NEWVAREQ, 0, $2); }
 | ASSIGN VAR ASSIGN2 expr  { add_instruction(ASSIGN, 0, $2); }
 | PRINT expr               { add_instruction(PRINT); }
 | GOTO LABEL               { add_instruction(JMP, -999, $2); }
@@ -93,7 +93,7 @@ ELSE ':' bloc           { }
 END                     { code_genere[$1.jmp].value = ic; }
 
 | WHILE            { $1.jmp = ic; }
-condition ':'      { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); }
+condition ':'      { $1.jc = ic; add_instruction(JMPCOND); }
 bloc               { }
 END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
 
@@ -102,11 +102,18 @@ condition ':'      { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); code_genere[$
 bloc               { }
 END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
 
-| FOR NEWVAR VAR NEWVAREQ expr ',' { add_instruction(NEWVAREQ, 0, $3); $1.jmp = ic; }
+| FOR NEWVARm VAR NEWVAREQ expr ',' { add_instruction(NEWVAREQ, 0, $3); $1.jmp = ic; }
 condition ','                      { $1.jc = ic; add_instruction(JMPCOND); $1.jmpfor1 = ic; add_instruction(JMP); $1.jmpfor2 = ic;}
 instruction ':'                    { $1.jmpfor3 = ic; add_instruction(JMP); code_genere[$1.jmpfor1].value = ic; }
 bloc                               { add_instruction(JMP, $1.jmpfor2); code_genere[$1.jmpfor3].value = $1.jmp; }
 END                                { code_genere[$1.jc].value = ic; }
+
+| condition TERNARY { $2.jc = ic; add_instruction(JMPCOND); }
+TERNOP1 
+instruction        { $2.jmp = ic; add_instruction(JMP); }
+TERNOP2            { code_genere[$2.jc].value = ic;  }
+instruction        { code_genere[$2.jmp].value = ic;  }
+
 
 expr :
 NUM                 { add_instruction(NUM, $1); }
@@ -155,13 +162,14 @@ string print_code(int ins) {
     case INEQ     : return "INEQ";
     case NUM      : return "NUM";
     case VAR      : return "VAR";
-    case NEWVAR   : return "NEWVAR";
+    case NEWVARM  : return "NEWVAR";
+    case NEWVARm  : return "NEWVAR";
     case NEWVAREQ : return "NEWVAREQ";
     case PRINT    : return "OUT";
     case ASSIGN   : return "MOV";
     case JMP      : return "JMP";
     case JMPCOND  : return "JC ";
-    default : return "";
+    default       : return "";
   }
 }
 
@@ -281,7 +289,7 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
         ic++;
         break;
 
-      case NEWVAR:
+      case NEWVARM:
         variables[ins.name] = NULL;
         ic++;
         break;

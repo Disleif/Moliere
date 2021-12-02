@@ -8,7 +8,8 @@
 
 %%
 "Afficher"|"Ecrire"|"Affichage de" { return PRINT; }
-("n"|"N")"ouvelle variable"        { return NEWVAR; }
+"Nouvelle variable"                 { return NEWVARM; }
+"nouvelle variable"                 { return NEWVARm; }
 "valant"                           { return NEWVAREQ; }
 "Assigner à"|"Donner à"            { return ASSIGN; }
 "la valeur"                        { return ASSIGN2; }
@@ -17,9 +18,11 @@
 "Tant que"                         { return WHILE; }
 "Effectuer puis répéter tant que"  { return DOWHILE; }
 "Pour"                             { return FOR; }
-"appliquer"                        { return APPLY; }
 "Fin"                              { return END; }
 "Aller à"                          { return GOTO; }
+"Si oui :"|"Si oui, faire :"       { return TERNOP1; }
+", Si non :"|", Si non, faire :"|", Sinon :"|", Sinon, faire :" { return TERNOP2; }
+", si non :"|", si non, faire :"|", sinon :"|", sinon, faire :" { return TERNOP2; }
 
 "est "?"supérieur à"         { return SUP; }
 "est "?"inférieur à"         { return INF; }
@@ -33,14 +36,15 @@
 
 "++" { return INC; }
 "--" { return DEC; }
-"+" { return ADD; }
-"-" { return SUB; }
-"*" { return MUL; }
-"/" { return DIV; }
+"+"  { return ADD; }
+"-"  { return SUB; }
+"*"  { return MUL; }
+"/"  { return DIV; }
 
 "(" { return '('; }
 ")" { return ')'; }
 "," { return ','; }
+"?" { return TERNARY; }
 ", faire "?":" { return ':'; }
 
 "°".* { }
@@ -50,7 +54,7 @@
 " "   { }
 "."   { return '.'; }
 
-<<EOF>> { printf("Le programme est correct!\n\n"); return 0; }
+<<EOF>> { printf("Le programme est correct !\n\n"); return 0; }
 .       { printf("Erreur lexicale : %s\n\n", yytext); return 0; }
 
 %%

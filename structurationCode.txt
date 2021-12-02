@@ -42,11 +42,9 @@ Programme :
 
 /!\ Types + creation de variables
 
-###SI AUTOMATIQUE
-variable
-
-Nouvelle variable var1 égale à 6.
-Nouvelles variables var1 valant 6, var2 égale à 7 et var3 qui vaut 8.
+Nouveau nombre var1 égal à 6.
+Nouveau texte var2 égal à Hello World !.
+Nouveaux nombres / textes var1 valant ..., var2 égal à ... et var3 qui vaut ....
 
 /!\ Affectation variables
 Assigner / Donner à x la valeur y.
@@ -82,8 +80,8 @@ Pour ... tant que (CONDITION), faire :
       |etapes iterations + iterations
       V
 Pour x, ...
-Pour une nouvelle variable j valant ..., 
-Pour des nouvelles var k valant ..., ...
+Pour un nouveau nombre j valant ..., 
+Pour des nouveaux nombres k valant ..., ...
     ...
 
 /!\ While
