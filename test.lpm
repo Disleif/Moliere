@@ -1,1 +1,6 @@
-Ecrire "Bonjour le "monde" !".
+Nouvelle variable iterations.
+Ecrire "Combien d'itérations voulez-vous effectuer ?".
+Demander iterations.
+Pour nouvelle variable i valant 1, i est inférieur ou égal à iterations, i++ :
+    Ecrire i.
+Fin.

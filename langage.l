@@ -8,6 +8,7 @@
 
 %%
 "Afficher"|"Ecrire"|"Affichage de" { return PRINT; }
+"Demander"                         { return ASK; }
 "Nouvelle variable"                { return NEWVARM; }
 "nouvelle variable"                { return NEWVARm; }
 "valant"                           { return NEWEQ; }
@@ -20,7 +21,8 @@
 "Pour"                             { return FOR; }
 "Fin"                              { return END; }
 "Aller à"                          { return GOTO; }
-"Si oui :"|"Si oui, faire :"       { return TERNOP1; }
+
+"Si oui :"|"Si oui, faire :"                                    { return TERNOP1; }
 ", Si non :"|", Si non, faire :"|", Sinon :"|", Sinon, faire :" { return TERNOP2; }
 ", si non :"|", si non, faire :"|", sinon :"|", sinon, faire :" { return TERNOP2; }
 
@@ -33,6 +35,7 @@
 
 [0-9]+([0-9]*)?(([Ee][+-]?[0-9])|(\,)[0-9]+)? { yylval.valeur = atof(yytext); return NUM; }
 [A-Za-z_][A-Za-z_0-9]*                        { strcpy(yylval.nom, yytext); return VAR; }
+\".*\"                                        { strcpy(yylval.nom, yytext); return STR; }
 
 "++" { return INC; }
 "--" { return DEC; }
@@ -41,12 +44,11 @@
 "*"  { return MUL; }
 "/"  { return DIV; }
 
-"(" { return '('; }
-")" { return ')'; }
-"," { return ','; }
-"?" { return TERNARY; }
+"("            { return '('; }
+")"            { return ')'; }
+","            { return ','; }
+"?"            { return TERNARY; }
 ", faire "?":" { return ':'; }
-\".*\" { strcpy(yylval.nom, yytext); return STR; }
 
 "°".* { }
 \n    { }
@@ -55,7 +57,7 @@
 " "   { }
 "."   { return '.'; }
 
-<<EOF>> { printf("Le programme est correct !\n\n"); return 0; }
+<<EOF>> { return 0; }
 .       { printf("Erreur lexicale : %s\n\n", yytext); return 0; }
 
 %%

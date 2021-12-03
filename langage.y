@@ -60,7 +60,7 @@
 %token <valeur> NUM
 %token <nom> VAR LABEL STR
 %token <adresse> IF WHILE DOWHILE FOR TERNARY
-%token ELSE END GOTO ASSIGN ASSIGN2 PRINT JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWEQ
+%token ELSE END GOTO ASSIGN ASSIGN2 PRINT ASK JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWEQ
 
 %left ADD SUB 
 %right MUL DIV
@@ -80,54 +80,55 @@ label :
 
 instruction :
 /* Epsilon */
-| expr                     { }
-| NEWVARM VAR { add_instruction(NEWVARM, 0, $2); }
-| NEWVARM VAR NEWEQ expr { add_instruction(NEWEQ, 0, $2); }
-| ASSIGN VAR ASSIGN2 expr  { add_instruction(ASSIGN, 0, $2); }
-| PRINT expr               { add_instruction(PRINT, 0); }
-| PRINT STR                { add_instruction(PRINT, 1, $2); }
-| GOTO LABEL               { add_instruction(JMP, -999, $2); }
+| expr                    { }
+| NEWVARM VAR             { add_instruction(NEWVARM, 0, $2); }
+| NEWVARM VAR NEWEQ expr  { add_instruction(NEWEQ, 0, $2); }
+| ASSIGN VAR ASSIGN2 expr { add_instruction(ASSIGN, 0, $2); }
+| PRINT expr              { add_instruction(PRINT, 0); }
+| ASK VAR                 { add_instruction(ASK, 0, $2); }
+| PRINT STR               { add_instruction(PRINT, 1, $2); }
+| GOTO LABEL              { add_instruction(JMP, -999, $2); }
 
-| IF condition ':'      { $1.jc = ic; add_instruction(JMPCOND); }
-bloc                    { $1.jmp = ic; add_instruction(JMP); code_genere[$1.jc].value = ic; }
-ELSE ':' bloc           { }
-END                     { code_genere[$1.jmp].value = ic; }
+| IF condition ':' { $1.jc = ic; add_instruction(JMPCOND); }
+bloc               { $1.jmp = ic; add_instruction(JMP); code_genere[$1.jc].value = ic; }
+ELSE ':' bloc      { }
+END                { code_genere[$1.jmp].value = ic; }
 
-| WHILE            { $1.jmp = ic; }
-condition ':'      { $1.jc = ic; add_instruction(JMPCOND); }
-bloc               { }
-END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
+| WHILE       { $1.jmp = ic; }
+condition ':' { $1.jc = ic; add_instruction(JMPCOND); }
+bloc          { }
+END           { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic; }
 
-| DOWHILE          { add_instruction(JMP); $1.jmp = ic; }
-condition ':'      { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); code_genere[$1.jmp - 1].value = ic;}
-bloc               { }
-END                { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic;}
+| DOWHILE     { add_instruction(JMP); $1.jmp = ic; }
+condition ':' { $1.jc = ic; add_instruction(JMPCOND, $1.jmp); code_genere[$1.jmp - 1].value = ic; }
+bloc          { }
+END           { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic; }
 
 | FOR NEWVARm VAR NEWEQ expr ',' { add_instruction(NEWEQ, 0, $3); $1.jmp = ic; }
-condition ','                      { $1.jc = ic; add_instruction(JMPCOND); $1.jmpfor1 = ic; add_instruction(JMP); $1.jmpfor2 = ic;}
-instruction ':'                    { $1.jmpfor3 = ic; add_instruction(JMP); code_genere[$1.jmpfor1].value = ic; }
-bloc                               { add_instruction(JMP, $1.jmpfor2); code_genere[$1.jmpfor3].value = $1.jmp; }
-END                                { code_genere[$1.jc].value = ic; }
+condition ','                    { $1.jc = ic; add_instruction(JMPCOND); $1.jmpfor1 = ic; add_instruction(JMP); $1.jmpfor2 = ic; }
+instruction ':'                  { $1.jmpfor3 = ic; add_instruction(JMP); code_genere[$1.jmpfor1].value = ic; }
+bloc                             { add_instruction(JMP, $1.jmpfor2); code_genere[$1.jmpfor3].value = $1.jmp; }
+END                              { code_genere[$1.jc].value = ic; }
 
 | condition TERNARY { $2.jc = ic; add_instruction(JMPCOND); }
 TERNOP1 
-instruction        { $2.jmp = ic; add_instruction(JMP); }
-TERNOP2            { code_genere[$2.jc].value = ic;  }
-instruction        { code_genere[$2.jmp].value = ic;  }
+instruction         { $2.jmp = ic; add_instruction(JMP); }
+TERNOP2             { code_genere[$2.jc].value = ic; }
+instruction         { code_genere[$2.jmp].value = ic; }
 
 
 expr :
-NUM                 { add_instruction(NUM, $1); }
-| VAR               { add_instruction(VAR, 0, $1); }
-| '(' expr ')'      { }
-| expr ADD expr     { add_instruction(ADD); }
-| expr SUB expr     { add_instruction(SUB); }
-| expr MUL expr     { add_instruction(MUL); }
-| expr DIV expr     { add_instruction(DIV); }
-| INC VAR           { add_instruction(VAR, 0, $2); add_instruction(INC); add_instruction(ASSIGN, 0, $2); add_instruction(VAR, 0, $2); }
-| VAR INC           { add_instruction(VAR, 0, $1); add_instruction(INC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(DEC);}
-| DEC VAR           { add_instruction(VAR, 0, $2); add_instruction(DEC); add_instruction(ASSIGN, 0, $2); add_instruction(VAR, 0, $2); }
-| VAR DEC           { add_instruction(VAR, 0, $1); add_instruction(DEC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(INC);}
+NUM             { add_instruction(NUM, $1); }
+| VAR           { add_instruction(VAR, 0, $1); }
+| '(' expr ')'  { }
+| expr ADD expr { add_instruction(ADD); }
+| expr SUB expr { add_instruction(SUB); }
+| expr MUL expr { add_instruction(MUL); }
+| expr DIV expr { add_instruction(DIV); }
+| INC VAR       { add_instruction(VAR, 0, $2); add_instruction(INC); add_instruction(ASSIGN, 0, $2); add_instruction(VAR, 0, $2); }
+| VAR INC       { add_instruction(VAR, 0, $1); add_instruction(INC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(DEC); }
+| DEC VAR       { add_instruction(VAR, 0, $2); add_instruction(DEC); add_instruction(ASSIGN, 0, $2); add_instruction(VAR, 0, $2); }
+| VAR DEC       { add_instruction(VAR, 0, $1); add_instruction(DEC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(INC); }
 
 
 
@@ -166,6 +167,7 @@ string print_code(int ins) {
     case NEWVARM  : return "NEWVAR";
     case NEWVARm  : return "NEWVAR";
     case NEWEQ    : return "NEWEQ";
+    case ASK      : return "CIN";
     case PRINT    : return "OUT";
     case ASSIGN   : return "MOV";
     case JMP      : return "JMP";
@@ -305,7 +307,7 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
       case ASSIGN:
         r1 = pile.top();
         pile.pop();
-        if ( variables.find(ins.name) == variables.end() ) {
+        if (variables.find(ins.name) == variables.end()) {
           cout << "Variable non initialisée : \"" + ins.name + "\"." << endl;
           return;
         } else {
@@ -322,6 +324,18 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
         } else {
           string str = ins.name;
           cout << "> " << str.substr(1, str.size() - 2) << endl;
+        }
+        ic++;
+        break;
+
+      case ASK:
+        cout << "> ";
+        cin >> r1;
+        if (variables.find(ins.name) == variables.end()) {
+          cout << "Variable non initialisée : \"" + ins.name + "\"." << endl;
+          return;
+        } else {
+          variables[ins.name] = r1;
         }
         ic++;
         break;
@@ -357,18 +371,7 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
   }
 }
 
-int main(int argc, char **argv) {
-  printf("┌──────────────────────────────────┐\n");
-  printf("│ Langage de Programmation Molière │\n");
-  printf("└──────────────────────────────────┘\n\n");
-
-  // Code pour traiter un fichier au lieu de l'entrée clavier
-  if ( argc > 1 ) yyin = fopen( argv[1], "r" );
-  else yyin = stdin;
-
-  yyparse();
-
-  // Affichage de la liste des instructions générées
+void assembleur(const vector <instruction> &code_genere) {
   cout << "--- Liste des instructions ---" << endl;
   for (int i = 0; i < code_genere.size(); i++){
     auto instruction = code_genere [i];
@@ -381,6 +384,21 @@ int main(int argc, char **argv) {
          << instruction.name
          << endl;
   }
+}
+
+int main(int argc, char **argv) {
+  printf("┌──────────────────────────────────┐\n");
+  printf("│ Langage de Programmation Molière │\n");
+  printf("└──────────────────────────────────┘\n\n");
+
+  // Code pour traiter un fichier au lieu de l'entrée clavier
+  if ( argc > 1 ) yyin = fopen( argv[1], "r" );
+  else yyin = stdin;
+
+  yyparse();
+
+  // Affichage de la liste des instructions générées
+  assembleur(code_genere);
 
   // Maintenant que nos instructions sont corretement générées, on peut exécuter
   execution(code_genere, variables);
