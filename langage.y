@@ -190,7 +190,7 @@ string print_code(int ins) {
 void execution (const vector <instruction> &code_genere, map<string,double> &variables) {
   cout << endl << "--- Exécution du programme ---" << endl;
 
-  stack<int> pile; // Pile
+  stack<double> pile; // Pile
   int ic = 0;      // Compteur instruction
   double r1, r2;   // Registres
 

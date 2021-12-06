@@ -1,9 +1,11 @@
 %option noyywrap
 
 %{
-  #include <stdio.h>
-  #include <stdlib.h>
+  #include <string>
+  #include <algorithm>
   #include "langage.bison.hpp"
+
+  using namespace std;
 %}
 
 %%
@@ -35,10 +37,10 @@
 "est "?"égal à"|"vaut"       { return EQ; }
 "est "?"différent de"        { return INEQ; }
 
-[0-9]+([0-9]*)?(([Ee][+-]?[0-9])|(\,)[0-9]+)? { yylval.valeur = atof(yytext); return NUM; }
-[A-Za-z_][A-Za-z_0-9]*                        { strcpy(yylval.nom, yytext); return VAR; }
-\|[A-Za-z_][A-Za-z_0-9]*\|                    { strcpy(yylval.nom, yytext); return LABEL; }
-\".*\"                                        { strcpy(yylval.nom, yytext); return STR; }
+[0-9]+(,[0-9]+)?([Ee][+-]?[0-9]+)? { std::string s = yytext; replace(s.begin(), s.end(), ',', '.'); yylval.valeur = stod(s); return NUM; }
+[A-Za-z_][A-Za-z_0-9]*             { strcpy(yylval.nom, yytext); return VAR; }
+\|[A-Za-z_][A-Za-z_0-9]*\|         { strcpy(yylval.nom, yytext); return LABEL; }
+\".*\"                             { strcpy(yylval.nom, yytext); return STR; }
 
 "++" { return INC; }
 "--" { return DEC; }
