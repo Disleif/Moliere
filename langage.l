@@ -13,9 +13,10 @@
 "Demander"                         { return ASK; }
 "Nouvelle variable"                { return NEWVARM; }
 "nouvelle variable"                { return NEWVARm; }
-"valant"                           { return NEWEQ; }
+"valant"|"qui vaut"                { return NEWEQ; }
 "Assigner à"|"Donner à"            { return ASSIGN; }
 "la valeur"                        { return ASSIGN2; }
+"la valeur de"                     { return ASSIGN3; }
 "Si"                               { return IF; }
 "Sinon"                            { return ELSE; }
 "Tant que"                         { return WHILE; }

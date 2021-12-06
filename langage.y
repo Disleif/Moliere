@@ -63,7 +63,7 @@
 %token <valeur> NUM
 %token <nom> VAR LABEL STR
 %token <adresse> IF WHILE DOWHILE FOR TERNARY FUNC
-%token ELSE END GOTO ASSIGN ASSIGN2 PRINT ASK JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWEQ CALL
+%token ELSE END GOTO ASSIGN ASSIGN2 ASSIGN3 PRINT ASK JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWEQ CALL
 
 %left ADD SUB 
 %right MUL DIV
@@ -87,6 +87,7 @@ instruction :
 | NEWVARM VAR             { add_instruction(NEWVARM, 0, $2); }
 | NEWVARM VAR NEWEQ expr  { add_instruction(NEWEQ, 0, $2); }
 | ASSIGN VAR ASSIGN2 expr { add_instruction(ASSIGN, 0, $2); }
+| ASSIGN VAR ASSIGN3 VAR  { add_instruction(VAR, 0, $4); add_instruction(ASSIGN, 0, $2); }
 | PRINT expr              { add_instruction(PRINT, 0); }
 | ASK VAR                 { add_instruction(ASK, 0, $2); }
 | PRINT STR               { add_instruction(PRINT, 1, $2); }
