@@ -27,6 +27,9 @@
   // Map associant chaque label à sa ligne
   map<string, int> adresses;
 
+  // Map associant chaque fonction à sa ligne
+  map<string, int> fonctions;
+
   // Structure pour accueillir le code généré
   vector<instruction> code_genere;
   int ic = 0;
@@ -59,8 +62,8 @@
 
 %token <valeur> NUM
 %token <nom> VAR LABEL STR
-%token <adresse> IF WHILE DOWHILE FOR TERNARY
-%token ELSE END GOTO ASSIGN ASSIGN2 PRINT ASK JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWEQ
+%token <adresse> IF WHILE DOWHILE FOR TERNARY FUNC
+%token ELSE END GOTO ASSIGN ASSIGN2 PRINT ASK JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWEQ CALL
 
 %left ADD SUB 
 %right MUL DIV
@@ -74,7 +77,7 @@ bloc :
 
 label :
 /* Epsilon */
-| LABEL ':' { adresses[$1] = ic; }
+| LABEL { adresses[$1] = ic; }
 
 
 
@@ -88,6 +91,7 @@ instruction :
 | ASK VAR                 { add_instruction(ASK, 0, $2); }
 | PRINT STR               { add_instruction(PRINT, 1, $2); }
 | GOTO LABEL              { add_instruction(JMP, -999, $2); }
+| CALL VAR                { add_instruction(CALL, 0, $2); }
 
 | IF condition ':' { $1.jc = ic; add_instruction(JMPCOND); }
 bloc               { $1.jmp = ic; add_instruction(JMP); code_genere[$1.jc].value = ic; }
@@ -115,6 +119,10 @@ TERNOP1
 instruction         { $2.jmp = ic; add_instruction(JMP); }
 TERNOP2             { code_genere[$2.jc].value = ic; }
 instruction         { code_genere[$2.jmp].value = ic; }
+
+| FUNC VAR ':'      { $1.jmp = ic; add_instruction(JMP); fonctions[$2] = ic; }
+bloc END            { add_instruction(END); code_genere[$1.jmp].value = ic; } 
+
 
 
 expr :
@@ -171,7 +179,9 @@ string print_code(int ins) {
     case PRINT    : return "OUT";
     case ASSIGN   : return "MOV";
     case JMP      : return "JMP";
-    case JMPCOND  : return "JC ";
+    case JMPCOND  : return "JC";
+    case CALL     : return "CALL";
+    case END      : return "END";
     default       : return "";
   }
 }
@@ -355,6 +365,17 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
         pile.pop();
         // Soit on skip le jump, soit on va à l'instruction donnée
         ic = (r1 ? ic + 1 : (int)ins.value);
+        break;
+
+      case CALL:
+        pile.push(ic + 1);
+        ic = fonctions[ins.name];
+        break;
+
+      case END:
+        r1 = pile.top();
+        pile.pop();
+        ic = r1;
         break;
 
       case VAR:
