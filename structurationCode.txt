@@ -5,49 +5,31 @@ fonctionnalités :
 -Instructions multiples choix : est égal à / égal à
 
 code :
--Entrée dans programme
 -Commentaires 
 -Types + creation de variables
 -Création de variables
 -Affectation variables
 -Comparaisons (ajouter and et or)
--Retours à la ligne
 -Incrémentations/Décrémentations
 -If/For classique/While/Do_While
 -cout // print
 -cin // scanf
 -appels fonctions
--return
 -condition ternaires
 
-A aborder :
-
--for of/in
--acces propriétés variables (ex : var.length -> Longueure de var, ...type, taille)
--méthodes variables selon type (ex : myTab.push(myVar) -> Ajouter myVar à myTab)
-
-//!\\ écrire "et" au lieu de "," pour dernière opération lorsque plusieurs
-//!\\ dans un affichage : si ! fin de ligne, tout passer en maj
-//!\\ répétition 
-Répéter x fois : 
-    ...
 
 -----------------------------------------------------
-
-/!\ Entrée dans programme
-Programme :
 
 /!\ Commentaires
 °blabla
 
 /!\ Types + creation de variables
 
-Nouveau nombre var1 égal à 6.
-Nouveau texte var2 égal à Hello World !.
-Nouveaux nombres / textes var1 valant ..., var2 égal à ... et var3 qui vaut ....
+Nouvelle variable var1 qui vaut / valant 6.
 
 /!\ Affectation variables
-Assigner / Donner à x la valeur y.
+Assigner / Donner à x la valeur 3.
+Assigner / Donner à x la valeur de y.
 
 /!\ Comparaisons
 > : est supérieur à / supérieur à
@@ -56,9 +38,6 @@ Assigner / Donner à x la valeur y.
 <= : est inférieur ou égal à / inférieur ou égal à
 == : est égal à / égal à / vaut
 != : est différent de / différent de
-
-/!\ Retours à la ligne
-    "\n" / Retour à la ligne <---- comme variable
 
 /!\ Incrémentations/Décrémentations
 x++ 
@@ -76,12 +55,7 @@ Sinon :
 Fin
 
 /!\ For classique
-Pour ... tant que (CONDITION), faire :
-      |etapes iterations + iterations
-      V
-Pour x, ...
-Pour un nouveau nombre j valant ..., 
-Pour des nouveaux nombres k valant ..., ...
+Pour ..., tant que (CONDITION), i++, faire :
     ...
 
 /!\ While
@@ -100,10 +74,7 @@ Afficher / Ecrire / Affichage de myString + "blabla".
 Demander myVar.
 
 /!\ appels fonctions
-Appeller myFunc avec arg1, arg2 et arg3.
-
-/!\ return
-Retourner myVar.
+Appeller myFunc.
 
 /!\ ternaire
 A est inférieur à 10 ? Si oui : Ecrire A, Si non : Ecrire "Supérieur".
