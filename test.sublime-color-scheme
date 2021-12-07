@@ -1,0 +1,81 @@
+{
+	"name": "test",
+	"globals":
+	{
+        // Configuration
+        "foreground": "white",
+        "background" : "#1e1e1e",
+        "font_style": "bold",
+        "caret" : "white",
+        "line_highlight" : "#AAA9A7",
+        "background-image" : "./desktop/croissant.png"
+	},
+	"rules":
+	[
+		{
+		"name": "Molière",
+		"scope": "id",
+		},
+		{ // IF & ELSE
+		"name": "Si",
+		"scope": "test.ifelse",
+		"foreground": "#c396e0",
+		},
+		{ // IF & ELSE
+		"name": "Sinon",
+		"scope": "test.ifelse",
+		"foreground": "#c396e0",
+		},
+		{ // Do
+		"name": "Do",
+		"scope": "test.do",
+		"foreground": "#c396e0",
+		},
+		{ // END
+		"name": "Fin",
+		"scope": "test.end",
+		"foreground": "#A9210B",
+		},
+		{ // WRITE
+		"name": "Ecrire",
+		"scope": "test.write",
+		"foreground": "#63D928",
+		},
+		{ // WHILE & DO WHILE
+		"name": "While",
+		"scope": "test.while",
+		"foreground": "#c396e0",
+		},
+		{ // FOR
+		"name": "Pour",
+		"scope": "test.for",
+		"foreground": "#c396e0",
+		},
+		{ // DECLARATION VARIABLE
+		"name": "decla_variable",
+		"scope": "test.decla",
+		"foreground": "#5dbea5",
+		},
+		{ // NEW
+		"name": "New",
+		"scope": "test.new",
+		"foreground": "#5099c7",
+		},
+		{ //COMMENTAIRE
+		 	"name": "comm",
+		 	"scope": "test.com",
+			"fontStyle":"italic",
+			"foreground":"#9399F2",
+		},
+		{ //CHAR
+		 	"name": "char",
+		 	"scope": "test.char",
+			"foreground":"#F3B93C",
+		},
+		{ //OPERATORS
+		 	"name": "operator",
+		 	"scope": "test.operator",
+			"foreground":"#d5dd26",
+		}
+	]
+}

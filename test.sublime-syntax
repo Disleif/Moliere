@@ -1,0 +1,32 @@
+%YAML 1.2
+---
+name: Test
+file_extensions:
+  - plm
+scope: default.plm
+contexts:
+  main:
+    - match: "( ?)Sinon(,?)( ?)(:?)|( ?)Si( ?)(:?)|( ?)faire( :?)"
+      scope: "test.ifelse"
+    - match: "( ?)Fin"
+      scope: "test.ifelse"
+    - match: "( ?)Ecrire|( ?)Afficher|( ?)Affichage de|( ?)Demander|( ?)Appeler|(^ ?)Fonction|( ?)Aller à"
+      scope: "test.write"
+    - match: "( ?)Tant que|( ?)Effectuer puis répéter tant que"
+      scope: "test.while"
+    - match: "( ?)Pour"
+      scope: "test.for"
+    - match: "variable"
+      scope: "test.decla"   
+    - match: \°.*| 
+      scope: "test.com"
+    - match: \"(\\.|[^\"])*\"
+      scope: "test.char"
+    - match: "Nouvelle"
+      scope: "test.new"
+    - match: "( ?)Faire"
+      scope: "test.do"
+    - match: ( ?)\++|( ?)--|( ?)+|( ?)-|( ?)\*|( ?)/|( ?)est supérieur à|( ?)est inférieur à|( ?)est supérieur ou égal à|( ?)est inférieur ou égal à|( ?)est égal à|( ?)vaut|( ?)est différent de|( ?)qui vaut|( ?)vallant|( ?)la valeur de|( ?)la valeur|( ?)Assigner à|( ?)Donner à
+      scope: "test.operator"
+    - match: \.
+      scope: "test.end"
