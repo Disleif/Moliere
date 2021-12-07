@@ -5,7 +5,7 @@ Langage de programmation Moliere.
 
 - ### Présentation :
     Le Langage de Programmation Molière est un langage qui se veut fidèle à la langue française.  
-    De fait, pour l'utiliser, l'utilisateur devra respecter ses usages détaillés ce-dessous :  
+    De fait, pour l'utiliser, l'utilisateur devra respecter ses usages détaillés ci-dessous :  
     \- Nombres : Le compilateur refusera tout nombre à virgule si le point est employé à l'insu de la virgule elle-même. Ex : 3,14 fonctionne, 3.14 est refusé.  
     \- Instructions : Le compilateur exigera qu'une instruction, à l'instar d'une phrase, démarre par une majuscule et se termine par un point.
 - ### Fonctionnalités :  
