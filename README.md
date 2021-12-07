@@ -102,4 +102,11 @@ Langage de programmation Moliere.
 - ### Appel de fonctions :  
     LPM, à ce jour, ne traite que les fonctions sans arguments :  
     Appeller maFunc.  
-      
+    
+## Coloration Synthaxique :
+
+Pour avoir accés à notre coloration synthaxique sur l'IDE "Sublime Text", il vous suffit de suivre les instructions suivantes :
+- Ouvrez l'emplacement du dossier de Sublime Text puis le dossier Packages.
+- Créez-y un dossier appelé "User" par exemple.
+- Ouvrez ce dossier et insérez-y les deux fichiers suivants : "test.sublime-color-scheme" et "test.sublime-syntax"
+- Vous avez maintenant accés à la coloration synthaxique spécialement conçue pour le langage de programmation Molière
