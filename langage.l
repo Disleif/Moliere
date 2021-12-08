@@ -22,6 +22,7 @@
 "Tant que"                         { return WHILE; }
 "Effectuer puis répéter tant que"  { return DOWHILE; }
 "Pour"                             { return FOR; }
+"tant que"                         { return FORCOND; }
 "Fin"                              { return END; }
 "Aller à"                          { return GOTO; }
 "Fonction"                         { return FUNC; }
