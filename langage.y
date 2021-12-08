@@ -63,7 +63,7 @@
 %token <valeur> NUM
 %token <nom> VAR LABEL STR
 %token <adresse> IF WHILE DOWHILE FOR TERNARY FUNC
-%token ELSE END GOTO ASSIGN ASSIGN2 ASSIGN3 PRINT ASK JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWEQ CALL
+%token ELSE END GOTO ASSIGN ASSIGN2 ASSIGN3 PRINT ASK JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWEQ CALL FORCOND
 
 %left ADD SUB 
 %right MUL DIV
@@ -110,7 +110,7 @@ bloc          { }
 END           { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic; }
 
 | FOR NEWVARm VAR NEWEQ expr ',' { add_instruction(NEWEQ, 0, $3); $1.jmp = ic; }
-condition ','                    { $1.jc = ic; add_instruction(JMPCOND); $1.jmpfor1 = ic; add_instruction(JMP); $1.jmpfor2 = ic; }
+FORCOND condition ','                    { $1.jc = ic; add_instruction(JMPCOND); $1.jmpfor1 = ic; add_instruction(JMP); $1.jmpfor2 = ic; }
 instruction ':'                  { $1.jmpfor3 = ic; add_instruction(JMP); code_genere[$1.jmpfor1].value = ic; }
 bloc                             { add_instruction(JMP, $1.jmpfor2); code_genere[$1.jmpfor3].value = $1.jmp; }
 END                              { code_genere[$1.jc].value = ic; }
@@ -190,8 +190,17 @@ string print_code(int ins) {
 // Fonction qui exécute le code générées
 void execution (const vector <instruction> &code_genere, map<string,double> &variables) {
   stack<double> pile; // Pile
+  stack<double> func; // Pile des fonctions
   int ic = 0;      // Compteur instruction
   double r1, r2;   // Registres
+
+  if (fonctions.find("principale") == fonctions.end()) {
+    cout << "Pas de fonction principale déclarée." << endl;
+    return;
+  } else {
+    func.push(code_genere.size()); // A la fin du main on sort de l'exécution
+    ic = fonctions["principale"];
+  }
 
   // On exécute chaque instruction
   while (ic < code_genere.size()) {
@@ -332,24 +341,24 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
           cout << r1 << endl;
         } else {
           string str = ins.name;
-          str = str.substr(1, str.size() - 2);
+          str = str.substr(1, str.size() - 2); // Supression des guillemets
 
           while (str.length() != 0) {
-            if (str.find("{") != string::npos) {
+            if (str.find("{") != string::npos) { // On cherche s'il faut afficher une variable
               unsigned first = str.find("{");
               unsigned last = str.find("}");
               cout << str.substr(0, first);
               string varName = str.substr(first + 1, last - first - 1);
-              if (variables.find(varName) == variables.end()) {
+              if (variables.find(varName) == variables.end()) { // Est-ce que la variable existe ?
                 cout << "Variable non initialisée : \"" + varName + "\"." << endl;
               return;
               } else {
-                cout << variables[varName];
+                cout << variables[varName]; // On affiche la variable
               }
               str = str.substr(last + 1, str.length() - last);
             } else {
-              cout << str;
-              str = str.substr(0, 0);
+              cout << str;            // Aucune variable à afficher, on affiche simplement la string
+              str = str.substr(0, 0); // et on sort de la boucle.
             }
           }
           cout << endl;
@@ -387,13 +396,13 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
         break;
 
       case CALL:
-        pile.push(ic + 1);
+        func.push(ic + 1);
         ic = fonctions[ins.name];
         break;
 
       case END:
-        r1 = pile.top();
-        pile.pop();
+        r1 = func.top();
+        func.pop();
         ic = r1;
         break;
 

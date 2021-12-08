@@ -1,7 +1,9 @@
-Nouvelle variable age.
-Nouvelle variable taille.
-Ecrire "Quel est votre age ?".
-Demander age.
-Ecrire "Quelle taille faites vous ?".
-Demander taille.
-Ecrire "Vous avez {age} ans et vous mesurez {taille} cm.".
+Ecrire 2.
+
+Fonction principale :
+    Pour nouvelle variable i valant 0, tant que i est inférieur à 5, i++ :
+        Ecrire "La valeur de i est {i}.".
+    Fin.
+Fin.
+
+Ecrire 2.
