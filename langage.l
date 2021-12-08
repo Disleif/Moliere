@@ -50,6 +50,7 @@
 "-"  { return SUB; }
 "*"  { return MUL; }
 "/"  { return DIV; }
+"%"  { return MOD; }
 
 "("            { return '('; }
 ")"            { return ')'; }

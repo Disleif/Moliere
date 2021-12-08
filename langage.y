@@ -65,7 +65,8 @@
 %token <adresse> IF WHILE DOWHILE FOR TERNARY FUNC
 %token ELSE END GOTO ASSIGN ASSIGN2 ASSIGN3 PRINT ASK JMP JMPCOND TERNOP1 TERNOP2 SUP INF SUPEQ INFEQ EQ INEQ INC DEC NEWVARM NEWVARm NEWEQ CALL FORCOND
 
-%left ADD SUB 
+%left ADD SUB
+%left MOD
 %right MUL DIV
 
 %%
@@ -134,6 +135,7 @@ NUM             { add_instruction(NUM, $1); }
 | expr SUB expr { add_instruction(SUB); }
 | expr MUL expr { add_instruction(MUL); }
 | expr DIV expr { add_instruction(DIV); }
+| expr MOD expr { add_instruction(MOD); }
 | INC VAR       { add_instruction(VAR, 0, $2); add_instruction(INC); add_instruction(ASSIGN, 0, $2); add_instruction(VAR, 0, $2); }
 | VAR INC       { add_instruction(VAR, 0, $1); add_instruction(INC); add_instruction(ASSIGN, 0, $1); add_instruction(VAR, 0, $1); add_instruction(DEC); }
 | DEC VAR       { add_instruction(VAR, 0, $2); add_instruction(DEC); add_instruction(ASSIGN, 0, $2); add_instruction(VAR, 0, $2); }
@@ -163,6 +165,7 @@ string print_code(int ins) {
     case SUB      : return "SUB";
     case MUL      : return "MUL";
     case DIV      : return "DIV";
+    case MOD      : return "MOD";
     case INC      : return "INC";
     case DEC      : return "DEC";
     case SUP      : return "SUP";
@@ -239,6 +242,15 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
         r1 = pile.top();
         pile.pop();
         pile.push(r1 / r2);
+        ic++;
+        break;
+
+      case MOD:
+        r2 = pile.top();
+        pile.pop();
+        r1 = pile.top();
+        pile.pop();
+        pile.push((int)r1 % (int)r2);
         ic++;
         break;
         
