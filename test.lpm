@@ -1,19 +1,7 @@
-° Cette fonction n'est jamais appelée, c'est simplement pour vérifier qu'elle ne s'éxécute pas
-Fonction func1:
-    Ecrire "Ceci ne devrait pas apparaitre".
-Fin.
-
-Ecrire "Je suis avant "maFonction"".
-Appeler maFonction.
-Ecrire "Je suis apres "maFonction"".
-
-° Cette fonction est définie APRES son appel, mais cela devrait tout de même fonctionner
-Fonction maFonction:
-    Ecrire "Je suis au debut de "maFonction"".
-    Si 1 + 2 est inférieur à 4:
-        Ecrire 5.
-    Sinon:
-        Ecrire 8 * (2 - 3).
-    Fin.
-    Ecrire "Je suis a la fin de "maFonction"".
-Fin.
+Nouvelle variable age.
+Nouvelle variable taille.
+Ecrire "Quel est votre age ?".
+Demander age.
+Ecrire "Quelle taille faites vous ?".
+Demander taille.
+Ecrire "Vous avez {age} ans et vous mesurez {taille} cm.".

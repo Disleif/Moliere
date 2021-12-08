@@ -189,8 +189,6 @@ string print_code(int ins) {
 
 // Fonction qui exécute le code générées
 void execution (const vector <instruction> &code_genere, map<string,double> &variables) {
-  cout << endl << "--- Exécution du programme ---" << endl;
-
   stack<double> pile; // Pile
   int ic = 0;      // Compteur instruction
   double r1, r2;   // Registres
@@ -331,10 +329,30 @@ void execution (const vector <instruction> &code_genere, map<string,double> &var
         if (ins.value == 0) {
           r1 = pile.top();
           pile.pop();
-          cout << "> " << r1 << endl;
+          cout << r1 << endl;
         } else {
           string str = ins.name;
-          cout << "> " << str.substr(1, str.size() - 2) << endl;
+          str = str.substr(1, str.size() - 2);
+
+          while (str.length() != 0) {
+            if (str.find("{") != string::npos) {
+              unsigned first = str.find("{");
+              unsigned last = str.find("}");
+              cout << str.substr(0, first);
+              string varName = str.substr(first + 1, last - first - 1);
+              if (variables.find(varName) == variables.end()) {
+                cout << "Variable non initialisée : \"" + varName + "\"." << endl;
+              return;
+              } else {
+                cout << variables[varName];
+              }
+              str = str.substr(last + 1, str.length() - last);
+            } else {
+              cout << str;
+              str = str.substr(0, 0);
+            }
+          }
+          cout << endl;
         }
         ic++;
         break;
@@ -409,6 +427,7 @@ void assembleur(const vector <instruction> &code_genere) {
 }
 
 int main(int argc, char **argv) {
+  printf("\n");
   printf("┌──────────────────────────────────┐\n");
   printf("│ Langage de Programmation Molière │\n");
   printf("└──────────────────────────────────┘\n\n");
@@ -420,10 +439,12 @@ int main(int argc, char **argv) {
   yyparse();
 
   // Affichage de la liste des instructions générées
-  assembleur(code_genere);
+  //assembleur(code_genere);
 
   // Maintenant que nos instructions sont corretement générées, on peut exécuter
   execution(code_genere, variables);
+
+  printf("\n");
 
   return 0;
 }
