@@ -111,7 +111,7 @@ bloc          { }
 END           { add_instruction(JMP, $1.jmp); code_genere[$1.jc].value = ic; }
 
 | FOR NEWVARm VAR NEWEQ expr ',' { add_instruction(NEWEQ, 0, $3); $1.jmp = ic; }
-FORCOND condition ','                    { $1.jc = ic; add_instruction(JMPCOND); $1.jmpfor1 = ic; add_instruction(JMP); $1.jmpfor2 = ic; }
+FORCOND condition ','            { $1.jc = ic; add_instruction(JMPCOND); $1.jmpfor1 = ic; add_instruction(JMP); $1.jmpfor2 = ic; }
 instruction ':'                  { $1.jmpfor3 = ic; add_instruction(JMP); code_genere[$1.jmpfor1].value = ic; }
 bloc                             { add_instruction(JMP, $1.jmpfor2); code_genere[$1.jmpfor3].value = $1.jmp; }
 END                              { code_genere[$1.jc].value = ic; }

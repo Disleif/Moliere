@@ -76,7 +76,7 @@ Langage de programmation Moliere.
     \- Boucle "for" :    
 
     `Pour [élément (déclarable)], tant que [condition], [élément]++ (, faire) :`  
-    /!\ Si l'on déclare une variable i, "nouvelle variable" ne prend pas de majuscule.  
+    /!\ Si l'on déclare une variable i, "une nouvelle variable" ne prend pas de majuscule.  
     ...  
     `Fin.`  
       

@@ -1,0 +1,30 @@
+Fonction principale :
+    Nouvelle variable n.
+    Nouvelle variable estPremier valant 1.
+
+    Ecrire "Entrez un entier :".
+    Demander n.
+
+    ° Vérification de n
+    Si n est inférieur ou égal à 1 :
+        Assigner à estPremier la valeur 0.
+
+    ° n est valide, on regarde si c'est un nombre premier
+    Sinon :
+        Pour une nouvelle variable i valant 2, tant que i est inférieur à n, i++ :
+            Si n % i est égal à 0 :
+                ° Il y a un diviseur de n (qui n'est ni 1, ni n), donc n n'est pas premier
+                Assigner à estPremier la valeur 0.
+            Sinon :
+                ° On continue de chercher un diviseur
+            Fin.
+        Fin.
+    Fin.
+
+    Si estPremier est égal à 1 :
+        Afficher "{n} est un nombre premier.".
+    Sinon :
+        Afficher "{n} n'est pas un nombre premier.".
+    Fin.
+
+Fin.

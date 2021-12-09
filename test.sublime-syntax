@@ -2,8 +2,8 @@
 ---
 name: Test
 file_extensions:
-  - plm
-scope: default.plm
+  - lpm
+scope: default.lpm
 contexts:
   main:
     - match: "( ?)Sinon(,?)( ?)(:?)|( ?)Si( ?)(:?)|( ?)faire( :?)"

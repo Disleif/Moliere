@@ -1,0 +1,10 @@
+Fonction principale :
+    Nouvelle variable n.
+    Nouvelle variable somme valant 0.
+    Afficher "Entrez un entier :".
+    Demander n.
+    Pour une nouvelle variable i valant 0, tant que i est inférieur ou égal à n, i++, faire :
+        Assigner à somme la valeur somme + i.
+    Fin.
+    Afficher "La somme des {n} premiers entiers est : {somme}.".
+Fin.
