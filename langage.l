@@ -12,7 +12,7 @@
 "Afficher"|"Ecrire"|"Affichage de" { return PRINT; }
 "Demander"                         { return ASK; }
 "Nouvelle variable"                { return NEWVARM; }
-"nouvelle variable"                { return NEWVARm; }
+"une nouvelle variable"            { return NEWVARm; }
 "valant"|"qui vaut"                { return NEWEQ; }
 "Assigner à"|"Donner à"            { return ASSIGN; }
 "la valeur"                        { return ASSIGN2; }

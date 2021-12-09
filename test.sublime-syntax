@@ -22,7 +22,7 @@ contexts:
       scope: "test.com"
     - match: \"(\\.|[^\"])*\"
       scope: "test.char"
-    - match: "Nouvelle|nouvelle"
+    - match: "Nouvelle|une nouvelle"
       scope: "test.new"
     - match: "( ?)Faire"
       scope: "test.do"
